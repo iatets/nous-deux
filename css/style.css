@@ -22,6 +22,16 @@ footer{display:flex;justify-content:center;gap:25px;color:#786f91;font-size:8px;
 .mini-step{background:#ffffff0b;border:1px solid var(--line);border-radius:15px;padding:16px 18px;margin-bottom:12px}.mini-step-head{font-size:10px;font-weight:800;letter-spacing:.12em;color:var(--pink2);text-transform:uppercase}.mini-step-text{font:600 22px/1.3 'Playfair Display';margin:10px 0 14px;color:var(--cream)}.mini-step-actions,.mini-points,.mini-timer{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.mini-btn{padding:10px 14px;font-size:10px;letter-spacing:.08em}.mini-timer{margin-bottom:12px}.mini-timer-value{font-weight:800;font-size:15px;color:var(--gold);min-width:72px}.mini-timer-value.done{color:var(--pink)}.mini-canvas-wrap{margin-bottom:12px}.mini-canvas{display:block;width:100%;border-radius:12px;touch-action:none;cursor:crosshair;margin-bottom:6px}.mini-board{columns:2;margin:0 0 12px;padding-left:18px;font-size:13px;line-height:1.7;color:var(--cream)}.mini-points{margin-top:6px}
 @media(max-width:520px){.mini-board{columns:1}.mini-step-text{font-size:19px}}
 
+/* Avertissement avant Ole Ole */
+.gate{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(15,12,30,.82)}
+.gate[hidden]{display:none}
+.gate-box{width:100%;max-width:440px;max-height:100%;overflow-y:auto;text-align:center;background:linear-gradient(145deg,#30284f,#241e40);border:1px solid #ffffff1c;border-radius:22px;padding:26px 22px;box-shadow:var(--shadow)}
+.gate-icon{font-size:34px;margin-bottom:8px}
+.gate-box h2{font-size:32px;margin:0 0 10px}
+.gate-box p{font-size:15px;line-height:1.55;color:#cfc7dc;margin:0 0 20px}
+.gate-actions{display:flex;flex-direction:column;gap:10px}
+.gate-actions button{width:100%;min-height:52px;font-size:13px;letter-spacing:.06em}
+
 /* ===== Mobile et iPhone ===== */
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:clip}
 body{min-height:100dvh}

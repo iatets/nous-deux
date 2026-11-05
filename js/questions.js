@@ -748,7 +748,61 @@ const OLEOLE_QUESTIONS = [
   "Est-ce que tu aimerais que je te force un peu à prendre plus profond en gorge ?",
   "Tu aimerais qu'on explore le humiliation verbale de façon plus poussée un soir ?",
   "Est-ce que tu aimerais que je te baise pendant que tu es complètement soumis·e et que tu n'as plus le droit de parler ?",
-  "Y a-t-il un kink que tu trouves vraiment tabou mais qui t'excite quand même en secret ?"
+  "Y a-t-il un kink que tu trouves vraiment tabou mais qui t'excite quand même en secret ?",
+
+  // ——— AJOUTS : SOFT / COQUIN ———
+  "Quelle tenue ou quel sous-vêtement sur moi te fait le plus d'effet ?",
+  "Quel est le dernier moment où tu m'as trouvé·e irrésistible sans me le dire ?",
+  "Quel baiser de notre histoire t'a le plus excité·e ?",
+  "Si je t'envoyais un message coquin en pleine journée, tu voudrais qu'il dise quoi ?",
+  "Tu préfères qu'on se déshabille lentement ou qu'on arrache tout ?",
+  "Tu préfères le sexe du matin, de l'après-midi ou du soir ? Pourquoi ?",
+  "Quelle musique tu mettrais pour une soirée rien que pour nous deux ?",
+  "Sous la douche ou dans le bain : où aimerais-tu qu'on passe plus de temps ensemble ?",
+  "Quel compliment sur ta façon de faire l'amour te ferait le plus d'effet ?",
+  "Si on avait une nuit entière sans aucune interruption, comment tu la commencerais ?",
+  "Quel souvenir de nos moments au lit te revient le plus souvent en tête ?",
+  "Quelle partie de ton corps aimerais-tu que je découvre davantage ?",
+
+  // ——— AJOUTS : ENVIES ET LIMITES ———
+  "Y a-t-il quelque chose qu'on fait et que tu aimerais changer, sans que je le prenne mal ?",
+  "Comment préfères-tu me dire que tu n'as pas envie, ou que quelque chose ne te plaît pas ?",
+  "Quelle est ta limite absolue, celle que je ne dois jamais franchir, même pour jouer ?",
+  "Si on choisissait un safe word, lequel ce serait ?",
+  "Qu'est-ce qui te fait perdre l'envie d'un coup ?",
+  "À quelle fréquence aimerais-tu qu'on le fasse, dans l'idéal ?",
+  "Y a-t-il quelque chose que tu as fait pour me faire plaisir, mais qui ne t'excite pas vraiment ?",
+
+  // ——— AJOUTS : PLUS DIRECT ———
+  "Quelle est ta position préférée pour jouir, et pourquoi ?",
+  "Tu préfères jouir avant moi, après moi ou en même temps ?",
+  "Est-ce que tu aimerais me montrer comment tu te touches quand tu es seul·e ?",
+  "Tu aimerais qu'on regarde un porno ensemble ? Quel genre tu choisirais ?",
+  "Quel jouet tu choisirais si on allait ensemble dans un sex-shop ?",
+  "Tu aimerais qu'on s'envoie des photos ou des vidéos coquines, juste entre nous ?",
+  "Quel est le fantasme que tu aimerais qu'on réalise en premier ?",
+  "Tu aimerais un week-end à l'hôtel avec pour seule règle de ne presque pas sortir du lit ?",
+  "Tu aimerais essayer un sex-toy à distance, que je contrôle pendant qu'on est dehors ?",
+  "Tu aimerais qu'on joue avec le chaud et le froid (glaçon, huile de massage chauffante) ?",
+  "Tu aimerais qu'on fasse l'amour devant un miroir pour se regarder ?",
+  "Qu'est-ce qui marche le mieux pour te faire jouir, et que je ne fais pas assez ?",
+  "Tu aimerais que je t'attache juste les poignets et que je te bande les yeux ?",
+  "Un soir, tu aimerais décider de tout ce que je dois faire, ou que ce soit moi qui décide ?",
+
+  // ——— AJOUTS : HARD ———
+  "Est-ce que le edging t'attire ? (que je t'amène au bord de l'orgasme plusieurs fois avant de te laisser jouir)",
+  "Quel scénario de domination aimerais-tu qu'on écrive ensemble, avec ses règles et son safe word ?",
+  "Est-ce que tu aimerais essayer un plug anal pendant un rapport, ou même avant de sortir ?",
+  "Aller dans un club libertin juste pour regarder, sans toucher personne, ça te tenterait ?",
+  "Qu'est-ce qui t'attire le plus : te faire regarder, ou regarder les autres ?",
+  "Tu aimerais qu'on essaie le bondage avec des cordes, en apprenant ensemble ?",
+  "Tu aimerais essayer le wax play avec une bougie de massage prévue pour ça ?",
+  "Quel mot cru t'excite le plus quand je le dis, et lequel ne veux-tu jamais entendre ?",
+  "Tu aimerais porter un collier ou une laisse, juste pour un soir ?",
+  "Est-ce que le fait d'obéir à un ordre précis, même par message dans la journée, t'excite ?",
+  "Quelle est la chose la plus hard que tu serais prêt·e à essayer une fois, juste avec moi ?",
+  "Si on ne devait garder qu'un seul kink pour le reste de notre vie, ce serait lequel ?",
+  "Si je te tendais une liste de pratiques à cocher oui / non / peut-être, quel serait ton plus gros « peut-être » ?"
 ];
 
 const oleoleCat = QUESTION_BANK.find(c => c.id === "oleole");
