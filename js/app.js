@@ -83,9 +83,9 @@ function addMiniTimer(parent,seconds){
 function addMiniCanvas(parent){
  const wrap=make("div","mini-canvas-wrap"),c=make("canvas","mini-canvas"),clear=make("button","skip-btn","Effacer le dessin");
  wrap.appendChild(c);wrap.appendChild(clear);parent.appendChild(wrap);
- c.width=Math.min(parent.clientWidth||640,900);c.height=Math.round(c.width*.55);
+ c.width=Math.min(parent.clientWidth||640,900);c.height=Math.round(c.width*(innerWidth<=520?.75:.55));
  const g=c.getContext("2d");
- const wipe=()=>{g.fillStyle="#fff4ee";g.fillRect(0,0,c.width,c.height);g.strokeStyle="#17132d";g.lineWidth=3;g.lineCap="round";g.lineJoin="round";};
+ const wipe=()=>{g.fillStyle="#fff4ee";g.fillRect(0,0,c.width,c.height);g.strokeStyle="#17132d";g.lineWidth=Math.max(3,c.width/130);g.lineCap="round";g.lineJoin="round";};
  const at=e=>{const r=c.getBoundingClientRect();return[(e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height];};
  let drawing=false;
  c.addEventListener("pointerdown",e=>{e.preventDefault();drawing=true;c.setPointerCapture(e.pointerId);const[x,y]=at(e);g.beginPath();g.moveTo(x,y);g.lineTo(x+.01,y);g.stroke();});

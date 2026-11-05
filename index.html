@@ -2,9 +2,16 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#17132d">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nous Deux">
   <title>NOUS DEUX — Le jeu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -18,12 +25,12 @@
     <section id="home" class="screen active">
       <div class="hero">
         <div class="eyebrow"><span>✦</span> LE JEU QUI VOUS RAPPROCHE <span>✦</span></div>
-        <h1>À quel point<br>vous connaissez-vous <em>vraiment&nbsp;?</em></h1>
-        <p class="hero-copy">Des questions, des défis, des fous rires et quelques surprises.<br>Deux joueurs, un écran, plein de choses à découvrir.</p>
+        <h1>À quel point<br><span class="nowrap">vous connaissez-vous</span> <em>vraiment&nbsp;?</em></h1>
+        <p class="hero-copy">Des questions, des défis, des fous rires et quelques surprises. <br>Deux joueurs, un écran, plein de choses à découvrir.</p>
         <div class="name-panel">
-          <div class="name-field"><label for="name1">JOUEUR 1</label><input id="name1" maxlength="18" value="Joueur 1" autocomplete="off"></div>
+          <div class="name-field"><label for="name1">JOUEUR 1</label><input id="name1" maxlength="18" value="Joueur 1" autocomplete="off" autocapitalize="words" enterkeyhint="next"></div>
           <div class="heart-divider">♥</div>
-          <div class="name-field"><label for="name2">JOUEUR 2</label><input id="name2" maxlength="18" value="Joueur 2" autocomplete="off"></div>
+          <div class="name-field"><label for="name2">JOUEUR 2</label><input id="name2" maxlength="18" value="Joueur 2" autocomplete="off" autocapitalize="words" enterkeyhint="done"></div>
         </div>
         <button class="primary-btn" id="startBtn">C'EST PARTI <span>→</span></button>
         <div class="micro-note">Aucune inscription · Aucune sauvegarde · Juste vous deux</div>
@@ -39,7 +46,7 @@
       <div class="section-head"><div><div class="eyebrow">CHOISISSEZ VOTRE AVENTURE</div><h2>On joue à quoi <em>maintenant&nbsp;?</em></h2></div><button class="text-btn" id="backHome">← Accueil</button></div>
       <div class="player-strip"><span class="avatar">♥</span><span id="playerNames"></span><span class="strip-sep">·</span><span>À vous de jouer !</span></div>
       <div class="mode-grid" id="modeGrid"></div>
-      <div class="secret-entry"><div><b>Vous avez un code secret ?</b><small>Certains modes bonus se cachent ici…</small></div><div class="secret-form"><input id="secretCode" placeholder="ENTRER UN CODE" maxlength="24"><button id="codeBtn">OK</button></div></div>
+      <div class="secret-entry"><div><b>Vous avez un code secret ?</b><small>Certains modes bonus se cachent ici…</small></div><div class="secret-form"><input id="secretCode" placeholder="ENTRER UN CODE" maxlength="24" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go"><button id="codeBtn">OK</button></div></div>
       <div id="secretMessage" class="secret-message"></div>
     </section>
 
