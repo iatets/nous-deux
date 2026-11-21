@@ -178,3 +178,5 @@ main{padding-left:max(5vw,env(safe-area-inset-left));padding-right:max(5vw,env(s
 .nim-said{font-size:13px;color:#b9b0ca;min-height:18px;margin-bottom:6px}
 .nim .mini-step-actions{margin:8px 0}
 @media(max-width:520px){.answers-grid{grid-template-columns:1fr}.ttt{grid-template-columns:repeat(3,1fr)}.mini-rules ol{font-size:15px}}
+.mini-dice{margin-bottom:12px}
+.mini-step-actions .mini-dice{margin-bottom:0}
