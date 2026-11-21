@@ -142,3 +142,39 @@ main{padding-left:max(5vw,env(safe-area-inset-left));padding-right:max(5vw,env(s
 
 /* Petits iPhone : le badge ne tient plus a cote du logo */
 @media(max-width:359px){.top-actions>span{display:none}}
+
+/* Mini-jeux : règles et outils intégrés */
+.mini-rules{background:#ffffff08;border:1px solid var(--line);border-radius:15px;padding:14px 18px;margin-bottom:14px}
+.mini-rules-head{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--pink2);text-transform:uppercase;margin-bottom:6px}
+.mini-rules ol{margin:0;padding-left:20px;font-size:14px;line-height:1.6;color:var(--cream)}
+.mini-rules li{margin:3px 0}
+.mini-rules-points{margin-top:10px;font-size:13px;line-height:1.5;color:#d9d0e6}
+.mini-rules-points b{color:var(--gold)}
+.mini-tool{margin-bottom:12px}
+.tally-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.tally-label{flex:1;font-size:13px;color:#d9d0e6}
+.tally-btn{min-width:44px}
+.tally-value{min-width:52px;text-align:center;font-size:18px;color:var(--gold)}
+.tally-value.done{color:var(--pink)}
+.mini-answers{display:flex;flex-direction:column;gap:10px}
+.mini-answers input{width:100%;background:#ffffff0a;border:1px solid var(--line);border-radius:12px;padding:12px;color:#fff;font:14px 'DM Sans';outline:none}
+.mini-answers input:focus{border-color:#ff9cba}
+.answers-note{font-size:13px;color:#d9d0e6;line-height:1.5}
+.answers-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.answers-card{background:#ffffff0b;border:1px solid var(--line);border-radius:12px;padding:12px}
+.answers-card b{font-size:11px;letter-spacing:.1em;color:var(--pink2);text-transform:uppercase}
+.answers-card p{margin:6px 0 0;white-space:pre-wrap;font-size:14px;color:var(--cream)}
+.folded-result{font:600 22px/1.35 'Playfair Display';color:var(--cream);padding:6px 0}
+.ttt{display:grid;grid-template-columns:repeat(3,64px);gap:6px;margin:10px 0}
+.ttt-cell{height:64px;border-radius:12px;border:1px solid var(--line);background:#ffffff0a;color:var(--cream);font:700 28px 'DM Sans';cursor:pointer}
+.ttt-cell.win{background:#ff7eae33;border-color:var(--pink)}
+.hang-svg{width:110px;height:130px;stroke:var(--cream);stroke-width:3;fill:none;stroke-linecap:round}
+.hang input{width:100%;background:#ffffff0a;border:1px solid var(--line);border-radius:12px;padding:12px;color:#fff;font:14px 'DM Sans';outline:none;margin:8px 0}
+.hang-word{font:700 26px/1.4 'DM Sans';letter-spacing:.15em;color:var(--gold);margin:6px 0}
+.hang-keys{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.hang-key{width:38px;height:38px;border-radius:9px;border:1px solid var(--line);background:#ffffff0a;color:var(--cream);font:700 14px 'DM Sans';cursor:pointer}
+.hang-key:disabled{opacity:.25;cursor:default}
+.nim-total{font:700 46px 'Playfair Display';color:var(--gold)}
+.nim-said{font-size:13px;color:#b9b0ca;min-height:18px;margin-bottom:6px}
+.nim .mini-step-actions{margin:8px 0}
+@media(max-width:520px){.answers-grid{grid-template-columns:1fr}.ttt{grid-template-columns:repeat(3,1fr)}.mini-rules ol{font-size:15px}}
