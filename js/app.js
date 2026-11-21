@@ -14,7 +14,7 @@ const modes = [
  ["expert","🔮","Cartes sans filtre","Des sujets personnels à partager seulement si vous le souhaitez.","NIVEAU EXPERT · FACULTATIF","expert"],
  ["oleole","🌶️","Olé Olé","Sexualité sans tabou. Du soft au très hot, pour les couples qui se connaissent bien.","SANS FILTRE · ADULTE","oleole"],
  ["oreiller","🛏️","Sur l'oreiller","Câlins, confidences et surtout plein de mini-jeux à faire dans le lit. Et ça peut chauffer un peu…","MINI-JEUX AU LIT · 18+","oreiller"],
- ["mini","🎮","Mini-jeux","Tabou, Time's Up, pendu, morpion, petit bac, mimes… Des jeux courts et des jeux plus longs, tout est dans l'appli.",`${MINI_LONG.length+MINI_SHORT.length} JEUX · 10 PAR PARTIE`,"complicite"]
+ ["mini","🎮","Mini-jeux","Tabou, petit bac, échelle de mots, Motus, Puissance 4, Boggle, mimes… Des jeux courts et des jeux longs, tout est dans l'appli.",`${MINI_LONG.length+MINI_SHORT.length} JEUX · 10 PAR PARTIE`,"complicite"]
 ];
 const challengeCards = [
  ["MIME EXPRESS","Mime une activité que l'autre adore. L'autre a 3 essais pour deviner.","Défi"],
@@ -105,7 +105,7 @@ function renderMini(q){
  const resets=[];
  const pick=a=>a[Math.floor(Math.random()*a.length)];
  const dieBtn=label=>make("button","secondary-btn mini-btn mini-dice",label);
- if(q.long){
+ if(q.long&&(q.rounds||q.sets||q.dice)){
   const board=q.boardPool?shuffle([...q.boardPool]).slice(0,q.boardSize||7):q.board;
   if(board){
    const ul=make("ul","mini-board");area.appendChild(ul);
@@ -157,6 +157,17 @@ function renderMini(q){
  if(q.tictactoe)resets.push(addTicTacToe(area,current));
  if(q.hangman)resets.push(addHangman(area,current));
  if(q.nim)addNim(area,current);
+ if(q.ladder)resets.push(addLadder(area,current));
+ if(q.longest)resets.push(addLongestWord(area));
+ if(q.compte)resets.push(addCompte(area));
+ if(q.motus)resets.push(addMotus(area,current));
+ if(q.mastermind)resets.push(addMastermind(area,current));
+ if(q.connect4)resets.push(addConnect4(area,current));
+ if(q.memory)resets.push(addMemory(area,current));
+ if(q.anagram)resets.push(addAnagram(area));
+ if(q.boggle)resets.push(addBoggle(area));
+ if(q.higherLower)addHigherLower(area,current);
+ if(q.reflex)addReflex(area);
  const pts=make("div","mini-points");
  state.players.forEach((p,n)=>{const b=make("button","secondary-btn mini-btn",`+1 ${p}`);b.addEventListener("click",()=>{state.scores[n]++;renderScoreboard();toast(`+1 pour ${p}`);});pts.appendChild(b);});
  area.appendChild(pts);

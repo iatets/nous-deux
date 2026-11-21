@@ -448,6 +448,102 @@ const MINI_LONG = [
       "Tu mens à chaque réponse", "Tu cites une couleur dans chaque réponse", "Tu réponds toujours en trois mots exactement",
       "Tu croises les bras avant de répondre", "Tu parles de nourriture dans chaque réponse", "Tu réponds comme si tu étais l'autre joueur"
     ]
+  },
+  // ——— JEUX DE LETTRES, DE CHIFFRES ET DE PLATEAU (pas seulement pour les couples) ———
+  {
+    title: "L'ÉCHELLE DE MOTS", type: "Lettres", text: "De POTS à MURS, une lettre à la fois.",
+    rules: [
+      "L'appli donne un mot de départ et un mot d'arrivée de 4 lettres (🎲 pour un autre défi).",
+      "À tour de rôle, changez une seule lettre du dernier mot pour former un vrai mot : POTS → MOTS → MORS → MURS.",
+      "Tapez le mot et validez : l'appli vérifie qu'une seule lettre a changé et que le mot existe.",
+      "Pas d'idée avant la sonnerie du chrono ? Touchez « Je bloque, je passe »."
+    ],
+    points: "Arrivés au mot final : 1 point pour chacun. Chaque « je passe » : 1 point pour l'autre.",
+    timer: 30, ladder: true
+  },
+  {
+    title: "LE MOT LE PLUS LONG", type: "Lettres", text: "Neuf lettres, trente secondes, un seul mot.",
+    rules: [
+      "Le joueur indiqué tire 9 lettres en choisissant à chaque fois « voyelle » ou « consonne » (ou tirage automatique).",
+      "Lancez le chrono : 30 secondes pour trouver le mot le plus long avec ces lettres, chacune utilisée une seule fois.",
+      "Chacun écrit son mot en secret, puis révélez : l'appli vérifie les mots et montre le plus long possible."
+    ],
+    points: "Mot valable le plus long : 1 point. Égalité : 1 point chacun.",
+    timer: 30, longest: true
+  },
+  {
+    title: "LE COMPTE EST BON", type: "Calcul", text: "Six nombres, une cible, quatre opérations.",
+    rules: [
+      "L'appli tire 6 nombres et un nombre à atteindre (🎲 pour un autre tirage).",
+      "Lancez le chrono : avec +, −, × et ÷, utilisez chaque nombre au plus une fois pour atteindre la cible. Pas de résultat négatif ni de fraction.",
+      "À la sonnerie, chacun annonce son résultat et explique son calcul. « Voir une solution » pour vérifier."
+    ],
+    points: "Le compte est bon, ou le résultat le plus proche : 1 point. Égalité : 1 point chacun.",
+    timer: 45, compte: true
+  },
+  {
+    title: "MOTUS", type: "Lettres", text: "Cinq lettres, six essais, la première est offerte.",
+    rules: [
+      "L'appli choisit un mot de 5 lettres et donne la première lettre.",
+      "Le joueur indiqué propose des mots de 5 lettres qui commencent par cette lettre (6 essais).",
+      "Case verte : bonne lettre bien placée. Case jaune : bonne lettre mal placée.",
+      "Ensuite « Mot suivant » : c'est à l'autre, avec un nouveau mot. Jouez autant de mots chacun."
+    ],
+    points: "Le plus petit total d'essais gagne : 1 point.",
+    motus: true
+  },
+  {
+    title: "MASTERMIND", type: "Logique", text: "Perce le code secret de quatre couleurs.",
+    rules: [
+      "L'appli cache un code de 4 couleurs (une couleur peut revenir plusieurs fois).",
+      "Le joueur indiqué compose une combinaison et valide : ● = bonne couleur bien placée, ○ = bonne couleur mal placée.",
+      "10 essais pour trouver. Ensuite c'est à l'autre, avec un nouveau code."
+    ],
+    points: "Le plus petit total d'essais gagne : 1 point.",
+    mastermind: true
+  },
+  {
+    title: "PUISSANCE 4", type: "Plateau", text: "Aligne quatre pions avant l'autre.",
+    rules: [
+      "Le joueur indiqué joue les 🔴 et commence ; l'autre joue les 🟡.",
+      "À tour de rôle, touchez une colonne : le pion tombe tout en bas.",
+      "Le premier qui aligne 4 pions (ligne, colonne ou diagonale) gagne.",
+      "« Nouvelle partie » pour rejouer : celui qui commence change."
+    ],
+    points: "Partie gagnée : 1 point.",
+    connect4: true
+  },
+  {
+    title: "MEMORY", type: "Mémoire", text: "Huit paires cachées. Qui a la meilleure mémoire ?",
+    rules: [
+      "16 cartes face cachée, soit 8 paires.",
+      "À tour de rôle, retournez deux cartes. Paire trouvée : vous la gardez et vous rejouez.",
+      "Pas de paire : les cartes se retournent et c'est à l'autre.",
+      "Quand toutes les paires sont trouvées, celui qui en a le plus gagne."
+    ],
+    points: "1 point pour le gagnant.",
+    memory: true
+  },
+  {
+    title: "ANAGRAMMES", type: "Lettres", text: "Remets les lettres dans l'ordre.",
+    rules: [
+      "L'appli mélange les lettres d'un mot.",
+      "Le premier qui trouve le mot le dit à voix haute.",
+      "« Voir la réponse » pour vérifier, puis « Mot suivant ». Jouez 5 mots."
+    ],
+    points: "Mot trouvé en premier : 1 point.",
+    anagram: true
+  },
+  {
+    title: "BOGGLE", type: "Lettres", text: "Seize lettres, deux minutes, un maximum de mots.",
+    rules: [
+      "Le joueur indiqué lance le chrono et cherche des mots dans la grille ; l'autre ne regarde pas.",
+      "Un mot = au moins 3 lettres qui se touchent (par un côté ou en diagonale), sans réutiliser une case.",
+      "Il écrit ses mots en secret puis passe le téléphone : l'autre relance le chrono et fait pareil.",
+      "Révélez : l'appli vérifie chaque mot et compte les points."
+    ],
+    points: "3-4 lettres : 1 · 5 lettres : 2 · 6 : 3 · 7 : 5 · 8 et plus : 11. Mot trouvé par les deux : 0. Le plus gros total gagne 1 point.",
+    timer: 120, boggle: true
   }
 ];
 
@@ -666,5 +762,25 @@ const MINI_SHORT = [
     rules: ["Le joueur indiqué lit le thème affiché à l'autre (🎲 pour un nouveau thème à chaque tour).", "Il lance le chrono : l'autre doit donner 3 réponses avant la sonnerie.", "Échangez les rôles. Faites 5 thèmes chacun."],
     points: "3 réponses avant la sonnerie : 1 point.",
     timer: 5, tally: { label: "Réussites", perPlayer: true }
+  },
+  {
+    title: "C'EST PLUS, C'EST MOINS", type: "Devinette", text: "Trouve le nombre secret entre 1 et 100.",
+    rules: [
+      "Le joueur indiqué tape un nombre secret entre 1 et 100 ; l'autre ne regarde pas.",
+      "L'autre propose des nombres : l'appli répond « c'est plus » ou « c'est moins ».",
+      "Une fois trouvé, échangez les rôles."
+    ],
+    points: "Le moins d'essais gagne : 1 point.",
+    higherLower: true
+  },
+  {
+    title: "LE PLUS RAPIDE", type: "Réflexes", text: "Le premier qui touche au signal gagne.",
+    rules: [
+      "Posez le téléphone entre vous, chacun un doigt au-dessus du bouton à son prénom.",
+      "Touchez « Prêts ? » et attendez : dès que « TOUCHEZ ! » s'affiche, appuyez le plus vite possible.",
+      "Toucher avant le signal fait perdre la manche. Le premier à 3 manches gagne."
+    ],
+    points: "1 point pour le gagnant.",
+    reflex: true
   }
 ];
