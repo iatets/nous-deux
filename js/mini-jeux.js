@@ -603,12 +603,6 @@ const MINI_SHORT = [
     canvas: true
   },
   {
-    title: "DOS À DOS", type: "Observation", text: "Qu'est-ce que l'autre porte, exactement ?",
-    rules: ["Mettez-vous dos à dos, sans vous retourner.", "À tour de rôle, citez un détail des vêtements de l'autre : couleur, motif, chaussures, bijou…", "Retournez-vous et vérifiez chaque détail."],
-    points: "Détail juste : 1 point.",
-    tally: { label: "Détails justes", perPlayer: true }
-  },
-  {
     title: "SPEED DATING", type: "Jeu de rôle", text: "30 secondes pour séduire.",
     variantLabel: "Situation", variants: ["Vous vous rencontrez dans un train", "Vous vous rencontrez à un mariage", "Vous êtes dans la même file d'attente", "Vous venez de matcher sur une appli", "Vous êtes voisins de table au restaurant", "Vous êtes coincés dans un ascenseur"],
     rules: ["Faites comme si vous ne vous connaissiez pas, dans la situation affichée.", "Le joueur indiqué lance le chrono : il a 30 secondes pour se présenter et donner envie d'un deuxième rendez-vous.", "Relancez le chrono pour l'autre. Chacun dit ensuite s'il accepte le rendez-vous."],
