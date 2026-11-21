@@ -52,6 +52,24 @@ const MINI_LONG = [
     ]
   },
   {
+    title: "DRAW MY LIFE", type: "Dessin", text: "Ta vie en 5 dessins, racontée à voix haute.",
+    rules: [
+      "Chaque étape est un moment de la vie. Le joueur indiqué lance le chrono et dessine son propre moment dans la zone de dessin.",
+      "Pendant qu'il dessine, il raconte à voix haute ce qu'il dessine, comme dans les vidéos « Draw my life ».",
+      "Étape suivante : l'autre dessine le même moment de sa vie à lui. Vous alternez ainsi jusqu'à la 5e étape.",
+      "Celui qui écoute peut poser une question à la fin de chaque dessin."
+    ],
+    points: "Chacun a fini ses 5 dessins : 1 point pour chacun. Chaque anecdote que l'autre ne connaissait pas : 1 point bonus.",
+    timer: 60, alternate: true, canvas: true, stepLabel: "Dessin",
+    rounds: [
+      "Étape 1 · Ta naissance et tes premières années", "Étape 1 · Ta naissance et tes premières années",
+      "Étape 2 · Ton enfance et l'école", "Étape 2 · Ton enfance et l'école",
+      "Étape 3 · Ton adolescence", "Étape 3 · Ton adolescence",
+      "Étape 4 · Une rencontre qui a tout changé", "Étape 4 · Une rencontre qui a tout changé",
+      "Étape 5 · Ta vie aujourd'hui… et tes rêves pour demain", "Étape 5 · Ta vie aujourd'hui… et tes rêves pour demain"
+    ]
+  },
+  {
     title: "PETIT BAC DE COUPLE", type: "Rapidité", text: "Une lettre, sept catégories, une minute et demie.",
     rules: [
       "Pas fan des catégories ou de la lettre ? Changez-les avec les boutons 🎲.",
@@ -566,13 +584,6 @@ const MINI_SHORT = [
     tally: { label: "Manches gagnées", perPlayer: true, max: 3 }
   },
   {
-    title: "LE MIROIR", type: "Complicité", text: "Deviens le reflet de l'autre.",
-    variantLabel: "Thème des gestes", variants: ["Des gestes lents, au hasard", "Se préparer le matin", "Cuisiner un gâteau", "Danser un slow", "Faire du sport", "Se maquiller ou se raser", "Jouer d'un instrument imaginaire"],
-    rules: ["Mettez-vous face à face et lancez le chrono.", "L'un fait des gestes sur le thème affiché ; l'autre les copie en même temps, comme un miroir.", "À la sonnerie, échangez les rôles et relancez."],
-    points: "Le meilleur miroir, désigné ensemble : 1 point.",
-    timer: 30
-  },
-  {
     title: "LE MOT DU COUPLE", type: "Choix simultané", text: "Dites le même mot en même temps.",
     variantLabel: "Thème", variants: ["Un mot qui décrit votre couple", "Un pays où partir ensemble", "Un plat pour ce soir", "Un prénom pour un futur chat", "Un film à regarder", "Une activité pour dimanche", "Un mot qui décrit votre premier rendez-vous"],
     rules: [
@@ -699,8 +710,9 @@ const MINI_SHORT = [
   {
     title: "UNE HISTOIRE À DEUX", type: "Improvisation", text: "Une phrase chacun.",
     variantLabel: "Première phrase", variants: ["Il était une fois…", "Ce matin-là, le réveil n'a pas sonné…", "Quand nous avons ouvert la porte, il y avait un éléphant dans le salon…", "Le jour où nous avons gagné au loto…", "Dans notre future maison, il y a une pièce secrète…", "Ce soir-là, la panne de courant a tout changé…"],
-    rules: ["Le joueur indiqué commence l'histoire avec la première phrase affichée.", "À tour de rôle, ajoutez une seule phrase.", "Après six phrases, donnez un titre à votre histoire."],
-    points: "Une histoire qui tient debout : 1 point pour chacun."
+    rules: ["Le joueur indiqué commence l'histoire avec la première phrase affichée.", "À tour de rôle, ajoutez une seule phrase.", "Après six phrases, donnez un titre à votre histoire.", "Option BD : lancez le chrono et dessinez vite votre histoire en 6 cases, une case par phrase. Chacun dessine les cases de ses propres phrases."],
+    points: "Une histoire qui tient debout : 1 point pour chacun. Option BD finie avant la sonnerie : 1 point bonus chacun.",
+    timer: 120, canvas: true, panels: 6
   },
 
   // ——— NOUVEAUX : de vrais jeux courts, sans matériel ———
