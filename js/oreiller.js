@@ -253,10 +253,10 @@ const OREILLER_LONG = [
     rules: [
       "Les dés sont lancés : une action et un endroit du corps.",
       "Le joueur indiqué lance le chrono et fait l'action, à cet endroit, sur l'autre, jusqu'à la sonnerie.",
-      "Un endroit ne plaît pas ? Celui qui reçoit dit « relance » : on relance les dés, sans discuter."
+      "Un endroit ne plaît pas ? Celui qui reçoit dit « relance » : touchez « 🎲 Relancer », sans discuter."
     ],
     points: "Pas de perdant : 1 point pour chacun si vous allez au bout des lancers.",
-    timer: 30, alternate: true, count: 8, stepLabel: "Lancer", nextLabel: "Relancer les dés 🎲",
+    timer: 30, alternate: true, count: 8, stepLabel: "Lancer", nextLabel: "Lancer suivant →", rerollLabel: "🎲 Relancer",
     dice: [
       ["Embrasse", "Caresse", "Masse", "Souffle sur", "Mordille doucement", "Effleure du bout des doigts", "Lèche", "Chatouille"],
       ["le cou", "l'oreille", "le ventre", "la nuque", "les lèvres", "l'intérieur du poignet", "le bas du dos", "les épaules", "la cuisse", "le torse", "la hanche", "l'endroit de ton choix"]
@@ -322,7 +322,8 @@ const OREILLER_SHORT = [
   },
   {
     title: "LA CUILLÈRE BAVARDE", type: "Tendresse", text: "Trois mots doux, dans le dos.",
-    rules: ["Mettez-vous en cuillère.", "Celui qui est derrière chuchote trois choses qu'il aime chez l'autre.", "Échangez les places et recommencez."],
+    variantLabel: "Thème", variants: ["Trois choses que tu aimes chez l'autre", "Trois souvenirs préférés avec l'autre", "Trois envies pour demain", "Trois endroits où tu voudrais l'emmener", "Trois choses qu'il ou elle fait mieux que personne"],
+    rules: ["Mettez-vous en cuillère.", "Celui qui est derrière chuchote trois choses sur le thème affiché.", "Échangez les places et recommencez."],
     points: "1 point pour chacun."
   },
   {
@@ -367,6 +368,7 @@ const OREILLER_SHORT = [
   },
   {
     title: "LE BAISER À LA CARTE", type: "Bisous", text: "Commande ton bisou.",
+    variantLabel: "Exemple de commande", variants: ["Un bisou papillon, avec les cils", "Un bisou esquimau, nez contre nez", "Un bisou dans le cou", "Un baiser langoureux", "Un bisou surprise, où tu veux", "Un bisou sur chaque paupière"],
     rules: ["L'un annonce un type de bisou : papillon (avec les cils), esquimau (nez contre nez), dans le cou, langoureux, surprise…", "L'autre l'exécute.", "Trois commandes chacun."],
     points: "1 point pour chacun."
   },
@@ -393,7 +395,8 @@ const OREILLER_SHORT = [
   },
   {
     title: "SANS LES MAINS", type: "Défi", text: "Une minute, zéro main.",
-    rules: ["L'un choisit un accessoire que l'autre doit lui enlever : chaussette, bracelet, élastique…", "Lancez le chrono : l'autre doit l'enlever sans utiliser ses mains.", "Puis échangez."],
+    variantLabel: "À enlever", variants: ["Une chaussette", "Un bracelet ou une montre", "Un élastique à cheveux", "Un t-shirt", "Une paire de lunettes", "Un collier"],
+    rules: ["L'un doit enlever à l'autre ce qui est affiché (🎲 pour changer).", "Lancez le chrono : il doit l'enlever sans utiliser ses mains.", "Puis échangez."],
     points: "Réussi avant la sonnerie : 1 point.",
     timer: 60
   },
@@ -440,7 +443,8 @@ const OREILLER_SHORT = [
   // ——— NOUVEAUX ———
   {
     title: "LE GLAÇON", type: "Classique", text: "Passe-le sans le faire tomber.", need: "un glaçon",
-    rules: ["L'un prend un glaçon entre ses lèvres.", "Faites-le passer de bouche à bouche, sans les mains, jusqu'à ce qu'il fonde.", "Bonus : faites-le glisser sur le cou de l'autre avant de le lui passer."],
+    variantLabel: "Bonus", variants: ["Faites-le glisser sur le cou de l'autre avant de le passer", "Faites-le glisser le long de sa colonne vertébrale", "Faites-le fondre sur son ventre", "Passez-le derrière son oreille", "Faites-le glisser sur ses lèvres"],
+    rules: ["L'un prend un glaçon entre ses lèvres.", "Faites-le passer de bouche à bouche, sans les mains, jusqu'à ce qu'il fonde.", "Bonus : faites ce qui est affiché avant de le passer (🎲 pour un autre bonus)."],
     points: "Celui qui fait tomber le glaçon donne 1 point à l'autre."
   },
   {
@@ -461,8 +465,9 @@ const OREILLER_SHORT = [
   },
   {
     title: "CHICHE SOUS LA COUETTE ?", type: "Défi", text: "Quelles sont les chances que tu le fasses ?",
+    variantLabel: "Idée de défi", variants: ["Chiche que tu dors nu(e) cette nuit ?", "Chiche que tu me fais un strip-tease de 30 secondes ?", "Chiche que tu m'envoies un message coquin demain au travail ?", "Chiche que tu portes ma chemise toute la soirée ?", "Chiche que tu me laisses te bander les yeux 5 minutes ?", "Chiche que tu me fais un massage de 10 minutes ?"],
     rules: [
-      "L'un lance un défi coquin : « Chiche que tu dors nu(e) cette nuit ? »",
+      "L'un lance le défi coquin affiché (🎲 pour en changer) ou en invente un.",
       "L'autre choisit un nombre maximum entre 3 et 10.",
       "Comptez « 1, 2, 3 » et dites en même temps un nombre entre 1 et ce maximum.",
       "Même nombre ? Le défi doit être fait ! Puis échangez les rôles."

@@ -54,6 +54,7 @@ const MINI_LONG = [
   {
     title: "PETIT BAC DE COUPLE", type: "Rapidité", text: "Une lettre, sept catégories, une minute et demie.",
     rules: [
+      "Pas fan des catégories ou de la lettre ? Changez-les avec les boutons 🎲.",
       "Le joueur indiqué lance le chrono et écrit, dans sa case, un mot par catégorie commençant par la lettre.",
       "À la sonnerie (ou avant), il cache ses réponses et passe le téléphone.",
       "L'autre relance le chrono et fait pareil.",
@@ -62,8 +63,16 @@ const MINI_LONG = [
     points: "Mot valable : 1 point. Mot valable que l'autre n'a pas trouvé : 2 points.",
     timer: 90, count: 3, stepLabel: "Lettre",
     answers: { count: 2, rows: 7, label: "Un mot par ligne, dans l'ordre des catégories" },
-    board: ["Un plat que tu adores", "Un lieu où partir à deux", "Un film ou une série", "Un surnom ou un mot doux", "Une qualité de ton ou ta partenaire", "Une activité à faire à deux", "Un objet de la maison"],
-    rounds: ["Lettre A", "Lettre B", "Lettre C", "Lettre D", "Lettre F", "Lettre G", "Lettre L", "Lettre M", "Lettre N", "Lettre P", "Lettre R", "Lettre S", "Lettre T", "Lettre V"]
+    rerollLabel: "🎲 Autre lettre",
+    boardSize: 7,
+    boardPool: [
+      "Un plat que tu adores", "Un lieu où partir à deux", "Un film ou une série", "Un surnom ou un mot doux", "Une qualité de ton ou ta partenaire",
+      "Une activité à faire à deux", "Un objet de la maison", "Un pays", "Une ville", "Un animal", "Un fruit ou un légume", "Un métier",
+      "Un prénom", "Une marque", "Un chanteur ou une chanteuse", "Un sport", "Un vêtement", "Une couleur", "Un cadeau à offrir", "Un dessert",
+      "Un personnage de dessin animé", "Une boisson", "Quelque chose qu'on trouve dans une salle de bain", "Un défaut", "Un moyen de transport",
+      "Un instrument de musique", "Une célébrité", "Une émotion", "Quelque chose qu'on emporte en vacances", "Un endroit pour un rendez-vous"
+    ],
+    rounds: "ABCDEFGHIJLMNOPRSTV".split("").map(l => "Lettre " + l)
   },
   {
     title: "QUI DE NOUS DEUX ?", type: "Désignation", text: "Comptez jusqu'à trois et désignez-vous.",
@@ -186,9 +195,13 @@ const MINI_LONG = [
       "Ajoutez +1 au compteur à chaque question. Une proposition de réponse compte aussi comme une question."
     ],
     points: "Trouvé en 20 questions ou moins : 1 point pour celui qui devine. Sinon : 1 point pour celui qui pensait.",
-    alternate: true, stepLabel: "Tour",
+    alternate: true, count: 2, stepLabel: "Tour",
     tally: { label: "Questions posées", max: 20 },
-    rounds: ["Pense à un souvenir que nous avons en commun.", "Pense à une personne que nous connaissons tous les deux."]
+    rounds: [
+      "Pense à un souvenir que nous avons en commun.", "Pense à une personne que nous connaissons tous les deux.", "Pense à un objet de notre maison.",
+      "Pense à un animal.", "Pense à un film ou une série qu'on a vu ensemble.", "Pense à une célébrité.", "Pense à un endroit où nous sommes allés ensemble.",
+      "Pense à un plat.", "Pense à un métier.", "Pense à un pays."
+    ]
   },
   {
     title: "LE FILM DE NOTRE VIE", type: "Imagination", text: "Votre histoire arrive au cinéma !",
@@ -242,8 +255,12 @@ const MINI_LONG = [
       "À la sonnerie, l'intervieweur résume ce qu'il a appris de nouveau."
     ],
     points: "Au moins une chose nouvelle apprise : 1 point pour l'intervieweur.",
-    timer: 120, alternate: true, stepLabel: "Interview",
-    rounds: ["Interviewe l'autre sur son enfance.", "Interviewe l'autre sur ses rêves.", "Interviewe l'autre sur ses peurs.", "Interviewe l'autre sur sa vision de notre avenir."]
+    timer: 120, alternate: true, count: 3, stepLabel: "Interview",
+    rounds: [
+      "Interviewe l'autre sur son enfance.", "Interviewe l'autre sur ses rêves.", "Interviewe l'autre sur ses peurs.", "Interviewe l'autre sur sa vision de notre avenir.",
+      "Interviewe l'autre sur son adolescence.", "Interviewe l'autre sur son travail ou ses études.", "Interviewe l'autre sur ses amis.",
+      "Interviewe l'autre sur ses goûts en musique.", "Interviewe l'autre sur sa famille.", "Interviewe l'autre sur ses plus grandes fiertés."
+    ]
   },
 
   // ——— NOUVEAUX : de vrais jeux de soirée, adaptés à deux ———
@@ -436,30 +453,34 @@ const MINI_LONG = [
 
 const MINI_SHORT = [
   {
-    title: "LE CHIFFRE COMMUN", type: "Télépathie", text: "Pensez au même nombre, en même temps.",
-    rules: ["Comptez « 1, 2, 3 » ensemble.", "Au « 3 », dites en même temps un nombre entre 1 et 10.", "Faites 5 essais."],
-    points: "À chaque nombre identique : 1 point pour chacun."
+    title: "LE CHIFFRE COMMUN", type: "Télépathie", text: "Pensez à la même chose, en même temps.",
+    variantLabel: "Thème", variants: ["Un nombre entre 1 et 10", "Une couleur", "Un fruit", "Un pays", "Un animal", "Un prénom", "Un plat", "Un chiffre entre 1 et 5", "Une saison", "Un super-héros"],
+    rules: ["Lisez le thème affiché (🎲 pour en changer).", "Comptez « 1, 2, 3 » et dites en même temps une réponse sur ce thème.", "Faites 5 essais, en changeant de thème si vous voulez."],
+    points: "À chaque réponse identique : 1 point pour chacun."
   },
   {
     title: "PIERRE-FEUILLE-CISEAUX", type: "Duel", text: "Le duel le plus célèbre du monde.",
+    variantLabel: "Gage du perdant", variants: ["Faire un compliment sincère au gagnant", "Masser les épaules du gagnant pendant une minute", "Préparer la prochaine boisson du gagnant", "Faire la prochaine corvée à la place du gagnant", "Chanter le refrain d'une chanson choisie par le gagnant", "Donner un bisou là où le gagnant le décide"],
     rules: [
       "Dites ensemble « pierre, feuille, ciseaux » et montrez votre main au dernier mot.",
       "La pierre casse les ciseaux, les ciseaux coupent la feuille, la feuille enveloppe la pierre.",
       "Notez les manches gagnées dans le compteur. Le premier à 3 manches gagne."
     ],
-    points: "1 point pour le gagnant. Le perdant lui fait un compliment sincère.",
+    points: "1 point pour le gagnant. Le perdant fait le gage affiché.",
     tally: { label: "Manches gagnées", perPlayer: true, max: 3 }
   },
   {
     title: "LE MIROIR", type: "Complicité", text: "Deviens le reflet de l'autre.",
-    rules: ["Mettez-vous face à face et lancez le chrono.", "L'un fait des gestes lents ; l'autre les copie en même temps, comme un miroir.", "À la sonnerie, échangez les rôles et relancez."],
+    variantLabel: "Thème des gestes", variants: ["Des gestes lents, au hasard", "Se préparer le matin", "Cuisiner un gâteau", "Danser un slow", "Faire du sport", "Se maquiller ou se raser", "Jouer d'un instrument imaginaire"],
+    rules: ["Mettez-vous face à face et lancez le chrono.", "L'un fait des gestes sur le thème affiché ; l'autre les copie en même temps, comme un miroir.", "À la sonnerie, échangez les rôles et relancez."],
     points: "Le meilleur miroir, désigné ensemble : 1 point.",
     timer: 30
   },
   {
     title: "LE MOT DU COUPLE", type: "Choix simultané", text: "Dites le même mot en même temps.",
+    variantLabel: "Thème", variants: ["Un mot qui décrit votre couple", "Un pays où partir ensemble", "Un plat pour ce soir", "Un prénom pour un futur chat", "Un film à regarder", "Une activité pour dimanche", "Un mot qui décrit votre premier rendez-vous"],
     rules: [
-      "Comptez « 1, 2, 3 » et dites en même temps un mot qui décrit votre couple.",
+      "Comptez « 1, 2, 3 » et dites en même temps un mot sur le thème affiché.",
       "Mots différents ? Recomptez et dites un mot qui relie vos deux mots précédents.",
       "Continuez jusqu'à dire le même mot, en 7 essais maximum (compteur ci-dessous)."
     ],
@@ -468,7 +489,8 @@ const MINI_SHORT = [
   },
   {
     title: "LA CHAÎNE DE MOTS", type: "Rapidité", text: "Un mot en appelle un autre.",
-    rules: ["Le joueur indiqué dit « amour ».", "À tour de rôle, dites un mot lié au mot précédent. Relancez le chrono de 5 secondes à chaque mot.", "Silence à la sonnerie ou mot déjà dit : perdu."],
+    variantLabel: "Mot de départ", variants: ["amour", "vacances", "chocolat", "plage", "nuit", "musique", "Noël", "café", "voyage", "dimanche"],
+    rules: ["Le joueur indiqué dit le mot de départ affiché.", "À tour de rôle, dites un mot lié au mot précédent. Relancez le chrono de 5 secondes à chaque mot.", "Silence à la sonnerie ou mot déjà dit : perdu."],
     points: "1 point pour celui qui n'a pas séché.",
     timer: 5
   },
@@ -478,9 +500,10 @@ const MINI_SHORT = [
     points: "1 point pour le gagnant."
   },
   {
-    title: "LE DESSIN À QUATRE MAINS", type: "Créativité", text: "Une maison, deux artistes, zéro parole.",
-    rules: ["Dessinez une maison dans la zone de dessin, un trait chacun, à tour de rôle.", "Interdit de parler ou de se faire des signes.", "Au bout de 10 traits chacun, donnez un titre à votre œuvre."],
-    points: "Vous reconnaissez tous les deux une maison : 1 point pour chacun.",
+    title: "LE DESSIN À QUATRE MAINS", type: "Créativité", text: "Un dessin, deux artistes, zéro parole.",
+    variantLabel: "Sujet", variants: ["Une maison", "Un chat", "Notre futur salon", "Un dragon", "Un vélo", "Un portrait de nous deux", "Une voiture", "Un bateau sur la mer"],
+    rules: ["Dessinez le sujet affiché dans la zone de dessin, un trait chacun, à tour de rôle.", "Interdit de parler ou de se faire des signes.", "Au bout de 10 traits chacun, donnez un titre à votre œuvre."],
+    points: "Vous reconnaissez tous les deux le sujet : 1 point pour chacun.",
     canvas: true
   },
   {
@@ -491,13 +514,15 @@ const MINI_SHORT = [
   },
   {
     title: "SPEED DATING", type: "Jeu de rôle", text: "30 secondes pour séduire.",
-    rules: ["Faites comme si vous ne vous connaissiez pas.", "Le joueur indiqué lance le chrono : il a 30 secondes pour se présenter et donner envie d'un deuxième rendez-vous.", "Relancez le chrono pour l'autre. Chacun dit ensuite s'il accepte le rendez-vous."],
+    variantLabel: "Situation", variants: ["Vous vous rencontrez dans un train", "Vous vous rencontrez à un mariage", "Vous êtes dans la même file d'attente", "Vous venez de matcher sur une appli", "Vous êtes voisins de table au restaurant", "Vous êtes coincés dans un ascenseur"],
+    rules: ["Faites comme si vous ne vous connaissiez pas, dans la situation affichée.", "Le joueur indiqué lance le chrono : il a 30 secondes pour se présenter et donner envie d'un deuxième rendez-vous.", "Relancez le chrono pour l'autre. Chacun dit ensuite s'il accepte le rendez-vous."],
     points: "Rendez-vous accepté : 1 point pour le séducteur.",
     timer: 30
   },
   {
-    title: "TROIS MOTS", type: "Se connaître", text: "Décris l'autre en trois mots.",
-    rules: ["Lancez le chrono : 30 secondes de réflexion en silence.", "Chacun décrit l'autre en trois mots.", "Chacun dit lequel des trois mots le surprend le plus, et pourquoi."],
+    title: "TROIS MOTS", type: "Se connaître", text: "Trois mots, pas un de plus.",
+    variantLabel: "Thème", variants: ["Décris l'autre en trois mots", "Décris notre couple en trois mots", "Décris notre premier rendez-vous en trois mots", "Décris l'autre au réveil en trois mots", "Décris nos dernières vacances en trois mots", "Décris l'autre quand il ou elle est fâché(e)"],
+    rules: ["Lancez le chrono : 30 secondes de réflexion en silence.", "Chacun répond au thème affiché en trois mots.", "Chacun dit lequel des mots de l'autre le surprend le plus, et pourquoi."],
     points: "1 point pour chacun si vous avez joué le jeu.",
     timer: 30
   },
@@ -520,7 +545,8 @@ const MINI_SHORT = [
   },
   {
     title: "LE SOUVENIR TRUQUÉ", type: "Mémoire", text: "Trouve l'erreur dans l'histoire.",
-    rules: ["L'un raconte un souvenir commun en y glissant une seule erreur.", "À la fin du récit, l'autre doit trouver l'erreur.", "Puis échangez les rôles."],
+    variantLabel: "Thème du souvenir", variants: ["Notre premier rendez-vous", "Nos dernières vacances", "Un anniversaire", "Une soirée entre amis", "Notre premier voyage", "Une dispute qui a fini en fou rire"],
+    rules: ["L'un raconte un souvenir commun sur le thème affiché, en y glissant une seule erreur.", "À la fin du récit, l'autre doit trouver l'erreur.", "Puis échangez les rôles."],
     points: "Erreur trouvée : 1 point pour celui qui l'a repérée. Sinon : 1 point pour le conteur."
   },
   {
@@ -535,47 +561,55 @@ const MINI_SHORT = [
     points: "Aliment trouvé : 1 point."
   },
   {
-    title: "LE MÊME CHOIX", type: "Choix simultané", text: "Soirée tranquille ou sortie improvisée ?",
-    rules: ["Comptez « 1, 2, 3 ».", "Dites en même temps : « soirée tranquille » ou « sortie improvisée ».", "Chacun explique son choix en une phrase."],
+    title: "LE MÊME CHOIX", type: "Choix simultané", text: "Le même choix, au même moment.",
+    variantLabel: "Le choix", variants: ["Soirée tranquille ou sortie improvisée ?", "Mer ou montagne ?", "Sucré ou salé ?", "Film d'horreur ou comédie romantique ?", "Grasse matinée ou lever avec le soleil ?", "Chien ou chat ?", "Restaurant ou plat fait maison ?", "Voyage en train ou en voiture ?", "Pizza ou burger ?", "Été ou hiver ?"],
+    rules: ["Lisez le choix affiché (🎲 pour en changer) et comptez « 1, 2, 3 ».", "Dites votre réponse en même temps.", "Chacun explique son choix en une phrase."],
     points: "Même choix : 1 point pour chacun."
   },
   {
-    title: "QUI LE FERAIT ?", type: "Désignation", text: "Qui se perdrait avec un GPS ?",
-    rules: ["Lisez la question à voix haute.", "Comptez « 1, 2, 3 » et désignez du doigt, en même temps, la personne concernée."],
+    title: "QUI LE FERAIT ?", type: "Désignation", text: "Qui de vous deux le ferait ?",
+    variantLabel: "La question", variants: ["Qui se perdrait avec un GPS ?", "Qui oublierait les clés en partant ?", "Qui pleurerait devant une pub ?", "Qui mangerait le dernier morceau sans demander ?", "Qui ferait une fête surprise ?", "Qui s'endormirait au cinéma ?", "Qui parlerait à un inconnu dans le métro ?", "Qui dépenserait tout son salaire en un week-end ?"],
+    rules: ["Lisez la question affichée à voix haute (🎲 pour en changer).", "Comptez « 1, 2, 3 » et désignez du doigt, en même temps, la personne concernée.", "Recommencez avec d'autres questions si vous voulez."],
     points: "Même personne désignée : 1 point pour chacun."
   },
   {
-    title: "TOP 5", type: "Course contre la montre", text: "Cinq choses que vous aimez tous les deux.",
-    rules: ["Lancez le chrono.", "Ensemble, trouvez cinq choses que vous aimez tous les deux. Ajoutez +1 au compteur à chaque trouvaille."],
+    title: "TOP 5", type: "Course contre la montre", text: "Cinq réponses communes avant la sonnerie.",
+    variantLabel: "Thème", variants: ["Cinq choses que vous aimez tous les deux", "Cinq plats que vous adorez tous les deux", "Cinq endroits où vous aimeriez aller ensemble", "Cinq films ou séries que vous aimez tous les deux", "Cinq chanteurs que vous écoutez tous les deux", "Cinq activités pour un dimanche parfait"],
+    rules: ["Lancez le chrono.", "Ensemble, trouvez cinq réponses sur le thème affiché qui vous plaisent à tous les deux. Ajoutez +1 au compteur à chaque trouvaille."],
     points: "5 trouvées avant la sonnerie : 1 point pour chacun.",
     timer: 45, tally: { label: "Trouvées", max: 5 }
   },
   {
     title: "MOT INTERDIT", type: "Concentration", text: "Surtout, ne dis pas le mot !",
-    rules: ["Choisissez ensemble un mot courant : « je », « bon », « genre »…", "Lancez le chrono et discutez de ce que vous voulez.", "À chaque fois que quelqu'un dit le mot, l'autre marque un point."],
+    variantLabel: "Mot interdit · sujet", variants: ["« je » · vos dernières vacances", "« genre » · votre semaine", "« bon » · votre plat préféré", "« oui » · vos projets pour l'été", "« trop » · votre premier rendez-vous", "« alors » · vos amis", "« en fait » · votre film préféré"],
+    rules: ["Le mot interdit et le sujet sont affichés (🎲 pour en changer).", "Lancez le chrono et discutez du sujet.", "À chaque fois que quelqu'un dit le mot, l'autre marque un point."],
     points: "1 point à chaque fois que l'autre prononce le mot.",
     timer: 60
   },
   {
-    title: "CLASSEMENT SECRET", type: "Révélation", text: "Mer, montagne, ville ou campagne ?",
-    rules: ["Chacun classe en secret ces quatre lieux, du préféré au moins aimé, et cache sa réponse.", "Révélez les deux classements.", "Comparez et expliquez vos choix."],
+    title: "CLASSEMENT SECRET", type: "Révélation", text: "Quatre choses, un classement secret.",
+    variantLabel: "À classer", variants: ["Mer, montagne, ville, campagne", "Pizza, sushi, burger, raclette", "Printemps, été, automne, hiver", "Cinéma, restaurant, concert, balade", "Chien, chat, lapin, poisson rouge", "Matin, midi, soir, nuit", "Bisou, câlin, massage, mot doux"],
+    rules: ["Chacun classe en secret les quatre choses affichées, de la préférée à la moins aimée, et cache sa réponse.", "Révélez les deux classements.", "Comparez et expliquez vos choix."],
     points: "Même n°1 : 1 point pour chacun. Classement identique : 2 points chacun.",
     answers: { count: 2, rows: 4, label: "1. …  2. …  3. …  4. …" }
   },
   {
     title: "DEVINE LE SOUVENIR", type: "Mémoire", text: "Trois indices pour un souvenir.",
-    rules: ["L'un pense à un souvenir commun.", "Il donne un indice à la fois, sans nom de lieu ni de personne.", "L'autre a droit à une seule proposition après chaque indice."],
+    variantLabel: "Thème du souvenir", variants: ["Un souvenir commun, au choix", "Un repas mémorable", "Un fou rire", "Un voyage ou une sortie", "Un moment gênant", "Un cadeau"],
+    rules: ["L'un pense à un souvenir commun sur le thème affiché.", "Il donne un indice à la fois, sans nom de lieu ni de personne.", "L'autre a droit à une seule proposition après chaque indice."],
     points: "Trouvé au 1er indice : 3 points. Au 2e : 2 points. Au 3e : 1 point."
   },
   {
-    title: "DÉFI ALPHABET", type: "Créativité", text: "Un compliment pour chaque lettre.",
-    rules: ["À tour de rôle, dites un mot positif qui décrit l'autre, en suivant l'alphabet : A comme attentionné, B comme beau…", "Relancez le chrono de 10 secondes à chaque mot. On peut passer les lettres difficiles (K, W, X, Y).", "Celui qui sèche à la sonnerie perd."],
+    title: "DÉFI ALPHABET", type: "Créativité", text: "Un mot pour chaque lettre.",
+    variantLabel: "Thème", variants: ["Un mot positif qui décrit l'autre", "Un plat ou un aliment", "Un pays ou une ville", "Une raison de m'aimer", "Un endroit où partir ensemble", "Un prénom"],
+    rules: ["À tour de rôle, dites un mot sur le thème affiché, en suivant l'alphabet : A, puis B, puis C…", "Relancez le chrono de 10 secondes à chaque mot. On peut passer les lettres difficiles (K, W, X, Y).", "Celui qui sèche à la sonnerie perd."],
     points: "1 point pour celui qui n'a pas séché.",
     timer: 10
   },
   {
     title: "UNE HISTOIRE À DEUX", type: "Improvisation", text: "Une phrase chacun.",
-    rules: ["Le joueur indiqué commence par « Il était une fois… ».", "À tour de rôle, ajoutez une seule phrase.", "Après six phrases, donnez un titre à votre histoire."],
+    variantLabel: "Première phrase", variants: ["Il était une fois…", "Ce matin-là, le réveil n'a pas sonné…", "Quand nous avons ouvert la porte, il y avait un éléphant dans le salon…", "Le jour où nous avons gagné au loto…", "Dans notre future maison, il y a une pièce secrète…", "Ce soir-là, la panne de courant a tout changé…"],
+    rules: ["Le joueur indiqué commence l'histoire avec la première phrase affichée.", "À tour de rôle, ajoutez une seule phrase.", "Après six phrases, donnez un titre à votre histoire."],
     points: "Une histoire qui tient debout : 1 point pour chacun."
   },
 
@@ -599,14 +633,16 @@ const MINI_SHORT = [
   },
   {
     title: "LE MOT CHAÎNÉ", type: "Lettres", text: "Chaque mot commence par la dernière lettre du précédent.",
-    rules: ["Le joueur indiqué dit un mot, par exemple « sapin ».", "L'autre dit un mot qui commence par la dernière lettre (« nuage »), et ainsi de suite. Relancez le chrono de 5 secondes à chaque mot.", "Pas de répétition, pas de nom propre."],
+    variantLabel: "Mot de départ", variants: ["sapin", "amour", "chocolat", "plage", "valise", "bisou", "dimanche", "lune"],
+    rules: ["Le joueur indiqué dit le mot de départ affiché.", "L'autre dit un mot qui commence par sa dernière lettre (« sapin » → « nuage »), et ainsi de suite. Relancez le chrono de 5 secondes à chaque mot.", "Pas de répétition, pas de nom propre."],
     points: "Celui qui sèche à la sonnerie perd : 1 point pour l'autre.",
     timer: 5
   },
   {
     title: "CHICHE ?", type: "Défi", text: "Quelles sont les chances que tu le fasses ?",
+    variantLabel: "Idée de défi", variants: ["Chiche que tu chantes debout sur le canapé ?", "Chiche que tu imites ta star préférée pendant 30 secondes ?", "Chiche que tu manges une cuillère de moutarde ?", "Chiche que tu fais 10 pompes ?", "Chiche que tu envoies « je t'aime » à ta mère ?", "Chiche que tu parles avec un accent toute la soirée ?", "Chiche que tu danses sans musique pendant une minute ?"],
     rules: [
-      "L'un lance un petit défi gentil : « Chiche que tu chantes debout sur le canapé ? »",
+      "L'un lance le petit défi affiché (🎲 pour en changer) ou en invente un.",
       "L'autre choisit un nombre maximum entre 3 et 10.",
       "Comptez « 1, 2, 3 » et dites en même temps un nombre entre 1 et ce maximum.",
       "Même nombre ? Le défi doit être fait ! Puis échangez les rôles."
@@ -626,7 +662,8 @@ const MINI_SHORT = [
   },
   {
     title: "LES 5 SECONDES", type: "Rapidité", text: "Trois réponses en cinq secondes.",
-    rules: ["Le joueur indiqué donne un thème à l'autre : « Cite 3 fromages », « 3 pays d'Afrique »…", "Il lance le chrono : l'autre doit donner 3 réponses avant la sonnerie.", "Échangez les rôles. Faites 5 thèmes chacun."],
+    variantLabel: "Thème", variants: ["Cite 3 fromages", "Cite 3 pays d'Afrique", "Cite 3 films de Disney", "Cite 3 marques de voiture", "Cite 3 choses qu'on trouve dans un frigo", "Cite 3 sports d'hiver", "Cite 3 chanteurs français", "Cite 3 desserts", "Cite 3 métiers qui commencent par P", "Cite 3 animaux de la jungle", "Cite 3 choses rouges", "Cite 3 instruments de musique"],
+    rules: ["Le joueur indiqué lit le thème affiché à l'autre (🎲 pour un nouveau thème à chaque tour).", "Il lance le chrono : l'autre doit donner 3 réponses avant la sonnerie.", "Échangez les rôles. Faites 5 thèmes chacun."],
     points: "3 réponses avant la sonnerie : 1 point.",
     timer: 5, tally: { label: "Réussites", perPlayer: true }
   }

@@ -103,13 +103,26 @@ function renderMini(q){
  const who=k=>state.players[(state.turn+k)%2];
  const current=()=>q.alternate?who(i):state.players[state.turn];
  const resets=[];
+ const pick=a=>a[Math.floor(Math.random()*a.length)];
+ const dieBtn=label=>make("button","secondary-btn mini-btn mini-dice",label);
  if(q.long){
-  if(q.board){const ul=make("ul","mini-board");q.board.forEach(t=>ul.appendChild(make("li","",t)));area.appendChild(ul);}
-  const pick=a=>a[Math.floor(Math.random()*a.length)];
-  const steps=q.dice?Array.from({length:q.count},()=>`${pick(q.dice[0])} ${pick(q.dice[1])}`):q.sets?pick(q.sets):q.count?shuffle([...q.rounds]).slice(0,q.count):q.rounds;
+  const board=q.boardPool?shuffle([...q.boardPool]).slice(0,q.boardSize||7):q.board;
+  if(board){
+   const ul=make("ul","mini-board");area.appendChild(ul);
+   const paintBoard=list=>{ul.innerHTML="";list.forEach(t=>ul.appendChild(make("li","",t)));};
+   paintBoard(board);
+   if(q.boardPool){const b=dieBtn("🎲 Nouvelles catégories");b.addEventListener("click",()=>{paintBoard(shuffle([...q.boardPool]).slice(0,q.boardSize||7));toast("Nouvelles catégories !");});area.appendChild(b);}
+  }
+  const combo=()=>`${pick(q.dice[0])} ${pick(q.dice[1])}`;
+  let pool=[],steps;
+  if(q.dice)steps=Array.from({length:q.count},combo);
+  else if(q.sets){pool=shuffle([...q.sets]);steps=pool.pop();}
+  else if(q.count){pool=shuffle([...q.rounds]);steps=pool.splice(0,q.count);}
+  else steps=q.rounds;
+  const canReroll=q.dice||pool.length>0;
   const box=make("div","mini-step"),head=make("div","mini-step-head"),prompt=make("div","mini-step-text"),row=make("div","mini-step-actions");
-  const reveal=make("button","secondary-btn mini-btn","Voir le mot"),nextStep=make("button","secondary-btn mini-btn",q.nextLabel||"Étape suivante →");
-  box.appendChild(head);box.appendChild(prompt);box.appendChild(row);if(q.secret)row.appendChild(reveal);row.appendChild(nextStep);area.appendChild(box);
+  const reveal=make("button","secondary-btn mini-btn","Voir le mot"),nextStep=make("button","secondary-btn mini-btn",q.nextLabel||"Étape suivante →"),reroll=dieBtn(q.rerollLabel||"🎲 Autre");
+  box.appendChild(head);box.appendChild(prompt);box.appendChild(row);if(q.secret)row.appendChild(reveal);if(canReroll)row.appendChild(reroll);row.appendChild(nextStep);area.appendChild(box);
   let shown=false;
   const paint=()=>{
    const turn=q.alternate?` · À ${who(i)} de jouer`:"";
@@ -119,8 +132,22 @@ function renderMini(q){
    nextStep.style.display=i<steps.length-1?"":"none";
   };
   reveal.addEventListener("click",()=>{shown=!shown;paint();});
+  reroll.addEventListener("click",()=>{
+   if(q.dice)steps[i]=combo();
+   else if(q.sets){pool.unshift(steps);steps=pool.pop();}
+   else{pool.unshift(steps[i]);steps[i]=pool.pop();}
+   shown=false;resets.forEach(r=>r());paint();
+  });
   nextStep.addEventListener("click",()=>{i++;shown=false;resets.forEach(r=>r());paint();});
   paint();
+ }
+ else if(q.variants){
+  const box=make("div","mini-step"),head=make("div","mini-step-head",q.variantLabel||"Ce tour-ci"),prompt=make("div","mini-step-text"),row=make("div","mini-step-actions");
+  const reroll=dieBtn("🎲 Autre");
+  let pool=shuffle([...q.variants]);
+  prompt.textContent=pool.pop();
+  reroll.addEventListener("click",()=>{if(!pool.length)pool=shuffle(q.variants.filter(v=>v!==prompt.textContent));prompt.textContent=pool.pop();resets.forEach(r=>r());});
+  row.appendChild(reroll);box.append(head,prompt,row);area.appendChild(box);
  }
  if(q.timer)resets.push(addMiniTimer(area,q.timer));
  if(q.canvas)resets.push(addMiniCanvas(area));
