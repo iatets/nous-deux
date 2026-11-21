@@ -1,21 +1,46 @@
 // Mini-jeux : une partie mélange 3 jeux longs et 7 jeux courts.
 //
-// Jeu long, champs possibles :
-//   title, type, text : le nom, l'étiquette et la phrase affichée en grand
-//   hint   : les règles
+// Champs communs à tous les jeux :
+//   title, type, text : le nom, l'étiquette et le but affiché en grand
+//   rules  : les étapes, dans l'ordre (affichées en liste numérotée)
+//   points : comment on marque
+//   need   : ce qu'il faut prévoir (si besoin)
+//
+// Outils intégrés (facultatifs) :
+//   timer    : chrono en secondes
+//   canvas   : zone de dessin
+//   tally    : compteur { label, start, max, perPlayer }
+//   answers  : réponses écrites en secret { count: 1 ou 2, label, rows }
+//   folded   : papier plié, une étape par joueur [{ label, example }]
+//   tictactoe, hangman, nim : morpion, pendu, jeu du 21
+//
+// Jeux longs uniquement :
 //   rounds : les étapes (mots, questions, lettres…)
 //   count  : nombre d'étapes tirées au hasard dans rounds (sinon toutes, dans l'ordre)
-//   timer  : chrono en secondes pour chaque étape
+//   sets   : plusieurs listes d'étapes, une seule est tirée au hasard
 //   secret : l'étape est cachée, seul le joueur concerné la regarde
 //   alternate : les joueurs jouent chacun leur tour à chaque étape
-//   canvas : ajoute une zone de dessin
 //   board  : liste affichée en permanence (les catégories du petit bac)
 //   stepLabel : mot affiché devant le numéro d'étape
+
+const TIMES_UP_WORDS = [
+  ["Tour Eiffel", "Brosse à dents", "Licorne", "Pompier", "Tiramisu"],
+  ["Astronaute", "Parapluie", "Crocodile", "Karaoké", "Croissant"],
+  ["Père Noël", "Machine à laver", "Pingouin", "Mariage", "Volcan"],
+  ["Superman", "Aspirateur", "Kangourou", "Pique-nique", "Glace à la vanille"],
+  ["Pirate", "Trottinette", "Girafe", "Anniversaire", "Raclette"]
+];
 
 const MINI_LONG = [
   {
     title: "PICTIONARY DE COUPLE", type: "Dessin", text: "Dessine, l'autre devine !",
-    hint: "Chacun votre tour : regarde le mot sans le montrer, puis dessine-le sans écrire ni parler. Si l'autre trouve avant la fin du chrono, 1 point pour chacun.",
+    rules: [
+      "Le joueur indiqué appuie sur « Voir le mot » sans montrer l'écran.",
+      "Il lance le chrono et dessine le mot dans la zone de dessin : pas de lettres, pas de chiffres, pas un mot.",
+      "L'autre propose autant de réponses qu'il veut avant la fin du chrono.",
+      "Étape suivante : on échange les rôles."
+    ],
+    points: "Mot trouvé à temps : 1 point pour chacun.",
     timer: 60, secret: true, alternate: true, canvas: true, count: 6, stepLabel: "Dessin",
     rounds: [
       "Notre premier rendez-vous", "Un petit-déjeuner au lit", "Une dispute pour la télécommande", "Voler la couette",
@@ -28,14 +53,26 @@ const MINI_LONG = [
   },
   {
     title: "PETIT BAC DE COUPLE", type: "Rapidité", text: "Une lettre, sept catégories, une minute et demie.",
-    hint: "Prenez chacun une feuille ou votre téléphone. Lancez le chrono et trouvez un mot par catégorie avec la lettre. 1 point par réponse juste, 2 si l'autre n'a pas trouvé la même.",
+    rules: [
+      "Le joueur indiqué lance le chrono et écrit, dans sa case, un mot par catégorie commençant par la lettre.",
+      "À la sonnerie (ou avant), il cache ses réponses et passe le téléphone.",
+      "L'autre relance le chrono et fait pareil.",
+      "Révélez les réponses et comparez catégorie par catégorie."
+    ],
+    points: "Mot valable : 1 point. Mot valable que l'autre n'a pas trouvé : 2 points.",
     timer: 90, count: 3, stepLabel: "Lettre",
+    answers: { count: 2, rows: 7, label: "Un mot par ligne, dans l'ordre des catégories" },
     board: ["Un plat que tu adores", "Un lieu où partir à deux", "Un film ou une série", "Un surnom ou un mot doux", "Une qualité de ton ou ta partenaire", "Une activité à faire à deux", "Un objet de la maison"],
     rounds: ["Lettre A", "Lettre B", "Lettre C", "Lettre D", "Lettre F", "Lettre G", "Lettre L", "Lettre M", "Lettre N", "Lettre P", "Lettre R", "Lettre S", "Lettre T", "Lettre V"]
   },
   {
     title: "QUI DE NOUS DEUX ?", type: "Désignation", text: "Comptez jusqu'à trois et désignez-vous.",
-    hint: "Lisez la question, comptez jusqu'à trois, puis montrez du doigt la bonne personne en même temps. Si vous êtes d'accord, 1 point pour chacun.",
+    rules: [
+      "Lisez la question à voix haute.",
+      "Comptez « 1, 2, 3 » et pointez du doigt, en même temps, la personne qui correspond (vous ou l'autre).",
+      "Pas d'accord ? Chacun a 10 secondes pour défendre son choix."
+    ],
+    points: "Même personne désignée : 1 point pour chacun.",
     count: 10, stepLabel: "Question",
     rounds: [
       "Qui de nous deux s'endort le premier ?", "Qui de nous deux met le plus de temps à se préparer ?", "Qui de nous deux dit pardon en premier ?",
@@ -49,7 +86,12 @@ const MINI_LONG = [
   },
   {
     title: "TU PRÉFÈRES ?", type: "Choix simultané", text: "Répondez en même temps, sans vous concerter.",
-    hint: "Lisez les deux choix, comptez jusqu'à trois et répondez en même temps. Même réponse : 1 point pour chacun. Réponse différente : expliquez-vous !",
+    rules: [
+      "Lisez les deux choix à voix haute.",
+      "Comptez « 1, 2, 3 » et dites votre choix en même temps.",
+      "Réponses différentes ? Chacun explique son choix en une phrase."
+    ],
+    points: "Même réponse : 1 point pour chacun.",
     count: 8, stepLabel: "Choix",
     rounds: [
       "Tu préfères une soirée sur le canapé ou une soirée au restaurant ?", "Tu préfères la mer ou la montagne ?", "Tu préfères un petit-déjeuner au lit ou un dîner aux chandelles ?",
@@ -62,8 +104,14 @@ const MINI_LONG = [
   },
   {
     title: "LE QUIZ DE NOTRE COUPLE", type: "Mémoire", text: "Connaissez-vous vraiment votre histoire ?",
-    hint: "Écrivez chacun votre réponse sur une feuille, puis comparez. Même réponse : 1 point pour chacun.",
+    rules: [
+      "Lisez la question à voix haute.",
+      "Chacun écrit sa réponse en secret dans l'application, puis la cache.",
+      "Révélez les deux réponses et comparez."
+    ],
+    points: "Même réponse (ou presque) : 1 point pour chacun.",
     count: 8, stepLabel: "Question",
+    answers: { count: 2, rows: 2, label: "Ta réponse" },
     rounds: [
       "Où a eu lieu notre premier rendez-vous ?", "Qui a envoyé le premier message ?", "Quelle est la date de notre rencontre ?",
       "Quel a été notre premier voyage ensemble ?", "Quel est notre restaurant préféré ?", "Quel film a-t-on regardé le plus souvent ?",
@@ -74,7 +122,12 @@ const MINI_LONG = [
   },
   {
     title: "LE MOT SECRET", type: "Devinette", text: "Fais deviner le mot sans jamais le dire.",
-    hint: "Chacun votre tour : regarde le mot sans le montrer, puis décris-le sans prononcer le mot ni les mots de la même famille. Si l'autre trouve à temps, 1 point pour chacun.",
+    rules: [
+      "Le joueur indiqué appuie sur « Voir le mot » sans montrer l'écran.",
+      "Il lance le chrono et décrit le mot avec des phrases, sans le dire ni utiliser un mot de la même famille (« aimer » pour « amour », par exemple).",
+      "Interdit de mimer, d'épeler ou de dire « ça commence par… »."
+    ],
+    points: "Mot trouvé à temps : 1 point pour chacun. Mot interdit prononcé : le mot est perdu.",
     timer: 45, secret: true, alternate: true, count: 6, stepLabel: "Mot",
     rounds: [
       "Tendresse", "Jalousie", "Couette", "Lune de miel", "Dispute", "Anniversaire", "Canapé", "Confiance",
@@ -84,7 +137,12 @@ const MINI_LONG = [
   },
   {
     title: "LE MIME DU COUPLE", type: "Mime", text: "Pas un mot : mime la scène !",
-    hint: "Chacun votre tour : regarde la scène sans la montrer, puis mime-la sans parler. Si l'autre trouve à temps, 1 point pour chacun.",
+    rules: [
+      "Le joueur indiqué appuie sur « Voir le mot » sans montrer l'écran.",
+      "Il lance le chrono et mime la scène, sans un mot ni un son.",
+      "L'autre doit retrouver la scène dans les grandes lignes."
+    ],
+    points: "Scène trouvée à temps : 1 point pour chacun.",
     timer: 45, secret: true, alternate: true, count: 6, stepLabel: "Mime",
     rounds: [
       "Tu cherches tes clés en retard", "Tu fais semblant d'aimer un cadeau", "Tu essaies de ne pas réveiller l'autre", "Tu montes un meuble sans notice",
@@ -95,8 +153,14 @@ const MINI_LONG = [
   },
   {
     title: "LE PORTRAIT CHINOIS", type: "Se connaître", text: "Si j'étais… qu'est-ce que je serais ?",
-    hint: "Chacun votre tour : le joueur indiqué écrit sa réponse en secret, l'autre essaie de la deviner à voix haute. Bonne réponse : 1 point pour celui qui a deviné.",
+    rules: [
+      "Le joueur indiqué lit la question, écrit sa réponse en secret dans l'application et la cache.",
+      "L'autre a 3 essais, à voix haute, pour deviner la réponse.",
+      "Révélez la réponse : le joueur explique son choix."
+    ],
+    points: "Réponse devinée en 3 essais maximum : 1 point pour celui qui a deviné.",
     alternate: true, count: 8, stepLabel: "Portrait",
+    answers: { count: 1, rows: 1, label: "Ta réponse secrète" },
     rounds: [
       "Si j'étais un animal, lequel serais-je ?", "Si j'étais un plat, lequel serais-je ?", "Si j'étais une saison, laquelle serais-je ?", "Si j'étais une ville, laquelle serais-je ?",
       "Si j'étais une chanson, laquelle serais-je ?", "Si j'étais une couleur, laquelle serais-je ?", "Si j'étais un personnage de film, lequel serais-je ?", "Si j'étais un objet de la maison, lequel serais-je ?",
@@ -105,19 +169,35 @@ const MINI_LONG = [
   },
   {
     title: "DEUX VÉRITÉS, UN MENSONGE", type: "Bluff", text: "Démasque le mensonge !",
-    hint: "Le joueur indiqué donne trois affirmations sur le thème : deux vraies et une fausse. L'autre doit trouver le mensonge. Trouvé : 1 point pour lui. Raté : 1 point pour le menteur.",
-    alternate: true, count: 4, stepLabel: "Thème",
+    rules: [
+      "Le joueur indiqué lance le chrono : il a 30 secondes pour préparer trois phrases sur le thème, deux vraies et une fausse.",
+      "Il les dit à voix haute, sur le même ton, sans sourire.",
+      "L'autre désigne celle qu'il pense fausse."
+    ],
+    points: "Mensonge trouvé : 1 point pour celui qui devine. Raté : 1 point pour le menteur.",
+    timer: 30, alternate: true, count: 4, stepLabel: "Thème",
     rounds: ["Thème : ton enfance", "Thème : tes goûts", "Thème : tes voyages", "Thème : ton adolescence", "Thème : ta famille", "Thème : tes anciennes passions", "Thème : tes plus grosses bêtises", "Thème : ta vie à l'école"]
   },
   {
     title: "VINGT QUESTIONS", type: "Devinette", text: "Vingt questions pour trouver à quoi je pense.",
-    hint: "Le joueur indiqué pense à une chose que vous connaissez tous les deux. L'autre a 20 questions fermées pour trouver, réponse par oui ou par non. Trouvé : 1 point pour lui. Sinon : 1 point pour l'autre.",
+    rules: [
+      "Le joueur indiqué pense à la chose demandée, sans rien dire.",
+      "L'autre pose des questions auxquelles on ne peut répondre que par « oui » ou « non ».",
+      "Ajoutez +1 au compteur à chaque question. Une proposition de réponse compte aussi comme une question."
+    ],
+    points: "Trouvé en 20 questions ou moins : 1 point pour celui qui devine. Sinon : 1 point pour celui qui pensait.",
     alternate: true, stepLabel: "Tour",
+    tally: { label: "Questions posées", max: 20 },
     rounds: ["Pense à un souvenir que nous avons en commun.", "Pense à une personne que nous connaissons tous les deux."]
   },
   {
     title: "LE FILM DE NOTRE VIE", type: "Imagination", text: "Votre histoire arrive au cinéma !",
-    hint: "Répondez ensemble à chaque étape, en vous mettant d'accord. Si vous arrivez au générique sans dispute, 1 point pour chacun !",
+    rules: [
+      "Lisez la question de la scène.",
+      "Discutez et mettez-vous d'accord sur une seule réponse.",
+      "Passez à la scène suivante, jusqu'au générique."
+    ],
+    points: "Arrivés au générique d'accord sur tout : 1 point pour chacun.",
     stepLabel: "Scène",
     rounds: [
       "Quel serait le titre du film de notre vie ?", "Ce serait une comédie, un film d'action ou un drame ?", "Quel acteur ou quelle actrice jouerait chacun de nous ?",
@@ -127,8 +207,14 @@ const MINI_LONG = [
   },
   {
     title: "NOS TOPS 5", type: "Comparaison", text: "Vos classements sont-ils les mêmes ?",
-    hint: "Lancez le chrono et écrivez chacun votre top 5 sur une feuille, puis comparez. 1 point pour chacun par réponse commune.",
+    rules: [
+      "Le joueur indiqué lance le chrono et écrit son top 5 en secret, du n°1 au n°5, puis le cache.",
+      "L'autre relance le chrono et fait pareil.",
+      "Révélez et comparez vos listes."
+    ],
+    points: "Élément présent dans les deux listes : 1 point pour chacun. Même rang en plus : 1 point bonus.",
     timer: 60, count: 3, stepLabel: "Classement",
+    answers: { count: 2, rows: 5, label: "1. …  2. …  3. …  4. …  5. …" },
     rounds: [
       "Top 5 de nos plus beaux moments", "Top 5 de nos plus gros fous rires", "Top 5 de nos endroits préférés", "Top 5 des plats qu'on aime manger ensemble",
       "Top 5 des voyages qu'on aimerait faire", "Top 5 de nos films ou séries à deux", "Top 5 des choses qu'on devrait faire plus souvent"
@@ -136,7 +222,12 @@ const MINI_LONG = [
   },
   {
     title: "LE BLIND TEST FREDONNÉ", type: "Musique", text: "Fredonne, l'autre devine la chanson !",
-    hint: "Chacun votre tour : choisis une chanson en suivant la consigne et fredonne-la sans dire les paroles. Si l'autre trouve à temps, 1 point pour chacun.",
+    rules: [
+      "Le joueur indiqué choisit en silence une chanson qui correspond à la consigne.",
+      "Il lance le chrono et la fredonne (« lalala » ou bouche fermée), sans aucune parole.",
+      "L'autre doit donner le titre ou l'artiste."
+    ],
+    points: "Chanson trouvée à temps : 1 point pour chacun.",
     timer: 30, alternate: true, count: 6, stepLabel: "Chanson",
     rounds: [
       "Une chanson qui te fait penser à nous", "Une chanson de ton adolescence", "Une chanson qu'on écoute en voiture", "Une chanson de dessin animé",
@@ -145,27 +236,398 @@ const MINI_LONG = [
   },
   {
     title: "L'INTERVIEW", type: "Se connaître", text: "Deux minutes pour tout savoir.",
-    hint: "Le joueur indiqué pose à l'autre toutes les questions qu'il veut pendant le chrono, puis résume ce qu'il a appris. Une chose nouvelle apprise : 1 point.",
+    rules: [
+      "Lancez le chrono.",
+      "Le joueur indiqué pose à l'autre toutes les questions qu'il veut sur le thème. L'autre répond franchement.",
+      "À la sonnerie, l'intervieweur résume ce qu'il a appris de nouveau."
+    ],
+    points: "Au moins une chose nouvelle apprise : 1 point pour l'intervieweur.",
     timer: 120, alternate: true, stepLabel: "Interview",
     rounds: ["Interviewe l'autre sur son enfance.", "Interviewe l'autre sur ses rêves.", "Interviewe l'autre sur ses peurs.", "Interviewe l'autre sur sa vision de notre avenir."]
+  },
+
+  // ——— NOUVEAUX : de vrais jeux de soirée, adaptés à deux ———
+  {
+    title: "TABOU", type: "Jeu de mots", text: "Fais deviner le mot… sans les mots interdits.",
+    rules: [
+      "Le joueur indiqué appuie sur « Voir le mot » sans montrer l'écran : il découvre le mot à faire deviner et 3 mots interdits.",
+      "Il lance le chrono et décrit le mot sans prononcer ni le mot, ni les mots interdits, ni un mot de leur famille.",
+      "Pas de mime, pas de « ça rime avec… », pas d'épellation."
+    ],
+    points: "Mot trouvé à temps : 1 point pour chacun. Mot interdit prononcé : le mot est perdu.",
+    timer: 60, secret: true, alternate: true, count: 6, stepLabel: "Carte",
+    rounds: [
+      "AMOUR — interdits : cœur, aimer, couple", "VACANCES — interdits : été, plage, partir", "CAFÉ — interdits : boire, matin, tasse",
+      "MARIAGE — interdits : bague, robe, fête", "CINÉMA — interdits : film, écran, salle", "PIZZA — interdits : Italie, fromage, four",
+      "DOUCHE — interdits : eau, salle de bain, laver", "ANNIVERSAIRE — interdits : gâteau, bougie, âge", "RÉVEIL — interdits : matin, sonner, dormir",
+      "CHAT — interdits : miauler, animal, souris", "NOËL — interdits : sapin, cadeau, décembre", "SMARTPHONE — interdits : téléphone, appeler, écran",
+      "BISOU — interdits : lèvres, embrasser, joue", "VALISE — interdits : voyage, bagage, vêtements", "PARAPLUIE — interdits : pluie, ouvrir, mouillé",
+      "CHOCOLAT — interdits : cacao, sucré, marron"
+    ]
+  },
+  {
+    title: "TIME'S UP À DEUX", type: "Mémoire", text: "Les mêmes mots, trois manches, de plus en plus dur.",
+    rules: [
+      "Le joueur indiqué appuie sur « Voir le mot » sans montrer l'écran, lance le chrono et fait deviner un maximum des 5 mots.",
+      "Manche 1 : on parle librement. Manche 2 : un seul mot par carte. Manche 3 : mime uniquement.",
+      "Ce sont les mêmes 5 mots aux trois manches : retenez bien les réponses !",
+      "Le joueur qui fait deviner change à chaque manche."
+    ],
+    points: "Chaque mot trouvé à temps : 1 point pour chacun.",
+    timer: 45, secret: true, alternate: true, stepLabel: "Manche",
+    sets: TIMES_UP_WORDS.map(w => [
+      "Parle librement : " + w.join(" · "),
+      "Un seul mot par carte : " + w.join(" · "),
+      "Mime uniquement : " + w.join(" · ")
+    ])
+  },
+  {
+    title: "LE PENDU", type: "Lettres", text: "Trouve le mot avant d'être pendu.",
+    rules: [
+      "Le joueur indiqué tape en secret un mot du thème, puis le cache.",
+      "L'autre touche une lettre à la fois. Bonne lettre : elle s'affiche à sa place. Mauvaise lettre : un trait de plus au pendu.",
+      "8 erreurs et le dessin est complet : c'est perdu."
+    ],
+    points: "Mot trouvé : 1 point pour celui qui devine. Pendu : 1 point pour celui qui a choisi le mot.",
+    alternate: true, count: 2, stepLabel: "Mot", hangman: true,
+    rounds: ["Thème : un pays", "Thème : un plat", "Thème : un animal", "Thème : un film ou une série", "Thème : un objet de la maison", "Thème : un métier", "Thème : une ville"]
+  },
+  {
+    title: "LE MORPION", type: "Stratégie", text: "Trois signes alignés et c'est gagné.",
+    rules: [
+      "Le joueur indiqué joue les croix (X) et commence ; l'autre joue les ronds (O).",
+      "À tour de rôle, touchez une case vide de la grille.",
+      "Le premier qui aligne 3 signes (ligne, colonne ou diagonale) gagne la manche.",
+      "Jouez 3 manches avec « Nouvelle manche » : celui qui commence change à chaque fois."
+    ],
+    points: "Celui qui gagne le plus de manches prend 1 point.",
+    stepLabel: "Partie", tictactoe: true,
+    rounds: ["Au meilleur des 3 manches !"]
+  },
+  {
+    title: "JE PARS EN VOYAGE…", type: "Mémoire", text: "Répète toute la liste et ajoute un objet.",
+    rules: [
+      "Le joueur indiqué dit la phrase de départ et ajoute un objet.",
+      "L'autre répète la phrase, tous les objets déjà cités dans l'ordre, et en ajoute un.",
+      "Continuez à tour de rôle. Le premier qui oublie un objet ou se trompe d'ordre perd la manche."
+    ],
+    points: "Manche gagnée : 1 point.",
+    alternate: true, count: 3, stepLabel: "Manche",
+    rounds: [
+      "« Je pars en vacances et dans ma valise, je mets… »", "« Je suis allé(e) au marché et j'ai acheté… »", "« Pour notre soirée parfaite, il nous faut… »",
+      "« Dans notre future maison, il y aura… »", "« Pour survivre sur une île déserte, j'emporte… »"
+    ]
+  },
+  {
+    title: "LE JEU DES CATÉGORIES", type: "Rapidité", text: "Un mot chacun, sans hésiter ni répéter.",
+    rules: [
+      "Lisez la catégorie. Le joueur indiqué commence.",
+      "À tour de rôle, citez un élément de la catégorie. Relancez le chrono de 5 secondes à chaque réponse.",
+      "Silence à la sonnerie, réponse fausse ou déjà dite : manche perdue."
+    ],
+    points: "Manche gagnée : 1 point.",
+    timer: 5, alternate: true, count: 4, stepLabel: "Catégorie",
+    rounds: [
+      "Des marques de voiture", "Des pays d'Europe", "Des fruits", "Des chanteurs ou chanteuses français", "Des dessins animés",
+      "Des choses qu'on trouve dans une salle de bain", "Des plats italiens", "Des sports", "Des métiers", "Des villes de France", "Des choses rouges", "Des animaux de la ferme"
+    ]
+  },
+  {
+    title: "HEUREUSEMENT, MALHEUREUSEMENT", type: "Improvisation", text: "Une histoire qui ne cesse de basculer.",
+    rules: [
+      "Le joueur indiqué lit le début de l'histoire et ajoute une phrase qui commence par « Malheureusement… ».",
+      "L'autre continue avec une phrase qui commence par « Heureusement… », puis on alterne.",
+      "Relancez le chrono de 10 secondes à chaque phrase. Au bout de 10 phrases, l'histoire peut se terminer."
+    ],
+    points: "Celui qui sèche à la sonnerie perd : 1 point pour l'autre. Arrivés à 10 phrases : 1 point pour chacun.",
+    timer: 10, alternate: true, count: 2, stepLabel: "Histoire",
+    rounds: [
+      "Ce matin, nous avons gagné un voyage à l'autre bout du monde.", "Nous avons décidé d'adopter un chien.", "Nous avons été invités au mariage d'une star.",
+      "Notre voisin a frappé à la porte à minuit.", "Nous avons ouvert un restaurant.", "Nous sommes partis camper dans la forêt."
+    ]
+  },
+  {
+    title: "QUI SUIS-JE ?", type: "Devinette", text: "Devine le personnage avec des questions en oui / non.",
+    rules: [
+      "Le joueur indiqué doit deviner : il ferme les yeux. L'autre appuie sur « Voir le mot », retient le personnage, puis le cache.",
+      "Lancez le chrono. Le devineur pose des questions fermées (« Je suis réel ? », « Je chante ? »…). L'autre répond seulement oui ou non.",
+      "Il peut proposer un nom à tout moment."
+    ],
+    points: "Personnage trouvé avant la sonnerie : 1 point pour chacun.",
+    timer: 120, secret: true, alternate: true, count: 4, stepLabel: "Personnage",
+    rounds: [
+      "Harry Potter", "Napoléon", "Shrek", "Marie Curie", "Zinédine Zidane", "Cendrillon", "Le père Noël", "Astérix",
+      "Albert Einstein", "Spider-Man", "Mickey", "Céline Dion", "Pikachu", "Sherlock Holmes", "Cléopâtre", "Batman",
+      "Dark Vador", "Louis XIV", "Mario", "Tintin"
+    ]
+  },
+  {
+    title: "LE BLUFF DU DICTIONNAIRE", type: "Bluff", text: "Vraie ou fausse définition ?",
+    rules: [
+      "Le joueur indiqué appuie sur « Voir le mot » sans montrer l'écran : il découvre un mot rare et sa vraie définition.",
+      "Il invente une fausse définition crédible.",
+      "Il lit le mot, puis les deux définitions, dans l'ordre qu'il veut.",
+      "L'autre choisit celle qu'il pense vraie."
+    ],
+    points: "Vraie définition trouvée : 1 point pour celui qui devine. Raté : 1 point pour le bluffeur.",
+    secret: true, alternate: true, count: 6, stepLabel: "Mot",
+    rounds: [
+      "CALLIPYGE : qui a de belles fesses", "BILLEVESÉE : une idée creuse, une sornette", "GALIMATIAS : un discours confus, incompréhensible",
+      "CHAFOUIN : qui a l'air rusé et sournois", "BISBILLE : une petite dispute pour pas grand-chose", "PÉTRICHOR : l'odeur de la terre après la pluie",
+      "NYCTHÉMÈRE : une durée de 24 heures, un jour et une nuit", "ATARAXIE : une tranquillité de l'âme absolue", "VESPÉRAL : qui a lieu le soir",
+      "TURLUPINER : tracasser, tourmenter quelqu'un", "COQUECIGRUE : une chose absurde, une baliverne", "CACOCHYME : de santé fragile, souvent malade",
+      "RIBOULDINGUE : une fête, une partie de plaisir", "MIRLIFLORE : un jeune homme élégant et prétentieux", "JACTANCE : une attitude vantarde",
+      "PALINODIE : un brusque changement d'opinion"
+    ]
+  },
+  {
+    title: "JE N'AI JAMAIS", type: "Aveux", text: "Cinq doigts levés… pour combien de temps ?",
+    rules: [
+      "Chacun commence avec 5 doigts levés (compteur ci-dessous).",
+      "Lisez la phrase à voix haute.",
+      "Celui qui l'a déjà fait baisse un doigt (−1 sur son compteur) et raconte en une phrase.",
+      "Celui qui n'a plus de doigt levé a perdu."
+    ],
+    points: "1 point pour celui à qui il reste le plus de doigts à la fin.",
+    count: 10, stepLabel: "Phrase",
+    tally: { label: "Doigts levés", start: 5, perPlayer: true, keep: true, max: 5 },
+    rounds: [
+      "Je n'ai jamais chanté sous la douche.", "Je n'ai jamais raté un avion ou un train.", "Je n'ai jamais menti sur mon âge.",
+      "Je n'ai jamais pleuré devant un dessin animé.", "Je n'ai jamais mangé quelque chose tombé par terre.", "Je n'ai jamais fait semblant d'être malade pour éviter quelque chose.",
+      "Je n'ai jamais oublié un anniversaire important.", "Je n'ai jamais dansé sur une table.", "Je n'ai jamais envoyé un message à la mauvaise personne.",
+      "Je n'ai jamais fait de nuit blanche.", "Je n'ai jamais cassé quelque chose en accusant quelqu'un d'autre.", "Je n'ai jamais parlé tout(e) seul(e) dans la rue.",
+      "Je n'ai jamais regardé une série entière en un week-end.", "Je n'ai jamais dit « je t'aime » en premier.", "Je n'ai jamais fait un selfie avec une star."
+    ]
+  },
+  {
+    title: "LES QUESTIONS QUI RAPPROCHENT", type: "Se connaître", text: "Inspiré des 36 questions du psychologue Arthur Aron.",
+    rules: [
+      "Le joueur indiqué lit la question et y répond en premier.",
+      "L'autre répond ensuite à la même question.",
+      "Prenez votre temps : il n'y a ni bonne ni mauvaise réponse."
+    ],
+    points: "Question à laquelle vous avez répondu tous les deux : 1 point pour chacun.",
+    alternate: true, count: 5, stepLabel: "Question",
+    rounds: [
+      "Si tu pouvais dîner avec n'importe qui au monde, qui choisirais-tu ?", "Aimerais-tu être célèbre ? Pour quoi ?",
+      "À quoi ressemblerait, pour toi, une journée parfaite ?", "Si tu pouvais te réveiller demain avec une nouvelle qualité, laquelle choisirais-tu ?",
+      "De quoi rêves-tu depuis longtemps ? Qu'est-ce qui t'a empêché(e) de le faire ?", "Quel est ton souvenir le plus précieux ?",
+      "Que représente l'amitié pour toi ?", "Cite trois choses que nous avons en commun, selon toi.",
+      "Termine la phrase : « J'aimerais avoir quelqu'un avec qui partager… »", "Quand as-tu pleuré devant quelqu'un pour la dernière fois ?",
+      "Dis-moi, en toute franchise, ce que tu aimes déjà chez moi.", "Si tu savais qu'il te restait un an à vivre, que changerais-tu ?"
+    ]
+  },
+  {
+    title: "LA RÈGLE SECRÈTE", type: "Enquête", text: "Découvre la règle cachée de l'autre.",
+    rules: [
+      "Le joueur indiqué appuie sur « Voir le mot » sans montrer l'écran : c'est sa règle secrète.",
+      "Lancez le chrono. L'autre lui pose des questions ; il répond en respectant toujours sa règle.",
+      "L'autre doit deviner la règle avant la sonnerie."
+    ],
+    points: "Règle trouvée : 1 point pour celui qui devine. Sinon : 1 point pour celui qui la cachait.",
+    timer: 120, secret: true, alternate: true, count: 2, stepLabel: "Règle",
+    rounds: [
+      "Tu commences chaque réponse par « Alors… »", "Tu touches ton oreille avant chaque réponse", "Tu réponds toujours par une autre question",
+      "Tu mens à chaque réponse", "Tu cites une couleur dans chaque réponse", "Tu réponds toujours en trois mots exactement",
+      "Tu croises les bras avant de répondre", "Tu parles de nourriture dans chaque réponse", "Tu réponds comme si tu étais l'autre joueur"
+    ]
   }
 ];
 
 const MINI_SHORT = [
-  ["LE CHIFFRE COMMUN", "Comptez jusqu'à trois et dites en même temps un nombre entre 1 et 10. Essayez cinq fois : à chaque nombre identique, 1 point pour chacun.", "Télépathie"],
-  ["PIERRE-FEUILLE-CISEAUX", "Jouez au meilleur des cinq. Le perdant fait un compliment sincère au gagnant.", "Duel"],
-  ["LE MIROIR", "Face à face, l'un fait des gestes lents et l'autre l'imite pendant 30 secondes. Puis échangez les rôles.", "Complicité"],
-  ["LE MOT DU COUPLE", "Comptez jusqu'à trois et dites en même temps un mot qui décrit votre couple. Recommencez jusqu'à dire le même.", "Choix simultané"],
-  ["LA CHAÎNE DE MOTS", "À tour de rôle, dites un mot lié au précédent. Commencez par « amour ». Le premier qui hésite plus de cinq secondes perd.", "Rapidité"],
-  ["RIRE INTERDIT", "Regardez-vous droit dans les yeux. Le premier qui rit ou qui détourne le regard a perdu.", "Duel"],
-  ["LE DESSIN À QUATRE MAINS", "Tenez le même crayon à deux et dessinez une maison sans vous parler. Admirez ensuite votre chef-d'œuvre.", "Créativité"],
-  ["DOS À DOS", "Mettez-vous dos à dos. Chacun décrit les vêtements de l'autre, sans regarder. 1 point par détail juste.", "Observation"],
-  ["SPEED DATING", "Faites comme si vous veniez de vous rencontrer : vous avez chacun 30 secondes pour vous présenter et donner envie d'un deuxième rendez-vous.", "Jeu de rôle"],
-  ["TROIS MOTS", "Chacun décrit l'autre en trois mots. Puis chacun dit lequel le surprend le plus, et pourquoi.", "Se connaître"],
-  ["LA PHRASE CULTE", "Chacun imite une phrase que l'autre répète tout le temps. Le plus ressemblant gagne le point.", "Imitation"],
-  ["LE GPS HUMAIN", "L'un ferme les yeux. L'autre le guide à la voix jusqu'à un objet de la pièce. Puis échangez les rôles.", "Confiance"],
-  ["NI OUI NI NON", "Discutez pendant une minute sans jamais dire « oui » ni « non ». Le premier qui se trompe perd.", "Concentration"],
-  ["LE SOUVENIR TRUQUÉ", "Raconte un souvenir commun en y glissant une erreur. L'autre doit la repérer. Puis échangez les rôles.", "Mémoire"],
-  ["L'INVENTAIRE", "En 45 secondes, chacun cite ce que l'autre a dans son sac ou ses poches. Vérifiez ensuite : 1 point par objet juste.", "Observation"],
-  ["LE GOÛT MYSTÈRE", "L'un ferme les yeux et l'autre lui fait goûter un aliment de la cuisine. Bonne réponse : 1 point. Puis échangez les rôles.", "Sens"]
+  {
+    title: "LE CHIFFRE COMMUN", type: "Télépathie", text: "Pensez au même nombre, en même temps.",
+    rules: ["Comptez « 1, 2, 3 » ensemble.", "Au « 3 », dites en même temps un nombre entre 1 et 10.", "Faites 5 essais."],
+    points: "À chaque nombre identique : 1 point pour chacun."
+  },
+  {
+    title: "PIERRE-FEUILLE-CISEAUX", type: "Duel", text: "Le duel le plus célèbre du monde.",
+    rules: [
+      "Dites ensemble « pierre, feuille, ciseaux » et montrez votre main au dernier mot.",
+      "La pierre casse les ciseaux, les ciseaux coupent la feuille, la feuille enveloppe la pierre.",
+      "Notez les manches gagnées dans le compteur. Le premier à 3 manches gagne."
+    ],
+    points: "1 point pour le gagnant. Le perdant lui fait un compliment sincère.",
+    tally: { label: "Manches gagnées", perPlayer: true, max: 3 }
+  },
+  {
+    title: "LE MIROIR", type: "Complicité", text: "Deviens le reflet de l'autre.",
+    rules: ["Mettez-vous face à face et lancez le chrono.", "L'un fait des gestes lents ; l'autre les copie en même temps, comme un miroir.", "À la sonnerie, échangez les rôles et relancez."],
+    points: "Le meilleur miroir, désigné ensemble : 1 point.",
+    timer: 30
+  },
+  {
+    title: "LE MOT DU COUPLE", type: "Choix simultané", text: "Dites le même mot en même temps.",
+    rules: [
+      "Comptez « 1, 2, 3 » et dites en même temps un mot qui décrit votre couple.",
+      "Mots différents ? Recomptez et dites un mot qui relie vos deux mots précédents.",
+      "Continuez jusqu'à dire le même mot, en 7 essais maximum (compteur ci-dessous)."
+    ],
+    points: "Même mot en 7 essais ou moins : 1 point pour chacun.",
+    tally: { label: "Essais", max: 7 }
+  },
+  {
+    title: "LA CHAÎNE DE MOTS", type: "Rapidité", text: "Un mot en appelle un autre.",
+    rules: ["Le joueur indiqué dit « amour ».", "À tour de rôle, dites un mot lié au mot précédent. Relancez le chrono de 5 secondes à chaque mot.", "Silence à la sonnerie ou mot déjà dit : perdu."],
+    points: "1 point pour celui qui n'a pas séché.",
+    timer: 5
+  },
+  {
+    title: "RIRE INTERDIT", type: "Duel", text: "Le premier qui rit a perdu.",
+    rules: ["Regardez-vous droit dans les yeux, à un bras de distance.", "Les grimaces sont autorisées. Interdit de parler ou de toucher l'autre.", "Le premier qui rit ou détourne le regard perd."],
+    points: "1 point pour le gagnant."
+  },
+  {
+    title: "LE DESSIN À QUATRE MAINS", type: "Créativité", text: "Une maison, deux artistes, zéro parole.",
+    rules: ["Dessinez une maison dans la zone de dessin, un trait chacun, à tour de rôle.", "Interdit de parler ou de se faire des signes.", "Au bout de 10 traits chacun, donnez un titre à votre œuvre."],
+    points: "Vous reconnaissez tous les deux une maison : 1 point pour chacun.",
+    canvas: true
+  },
+  {
+    title: "DOS À DOS", type: "Observation", text: "Qu'est-ce que l'autre porte, exactement ?",
+    rules: ["Mettez-vous dos à dos, sans vous retourner.", "À tour de rôle, citez un détail des vêtements de l'autre : couleur, motif, chaussures, bijou…", "Retournez-vous et vérifiez chaque détail."],
+    points: "Détail juste : 1 point.",
+    tally: { label: "Détails justes", perPlayer: true }
+  },
+  {
+    title: "SPEED DATING", type: "Jeu de rôle", text: "30 secondes pour séduire.",
+    rules: ["Faites comme si vous ne vous connaissiez pas.", "Le joueur indiqué lance le chrono : il a 30 secondes pour se présenter et donner envie d'un deuxième rendez-vous.", "Relancez le chrono pour l'autre. Chacun dit ensuite s'il accepte le rendez-vous."],
+    points: "Rendez-vous accepté : 1 point pour le séducteur.",
+    timer: 30
+  },
+  {
+    title: "TROIS MOTS", type: "Se connaître", text: "Décris l'autre en trois mots.",
+    rules: ["Lancez le chrono : 30 secondes de réflexion en silence.", "Chacun décrit l'autre en trois mots.", "Chacun dit lequel des trois mots le surprend le plus, et pourquoi."],
+    points: "1 point pour chacun si vous avez joué le jeu.",
+    timer: 30
+  },
+  {
+    title: "LA PHRASE CULTE", type: "Imitation", text: "Imite sa phrase fétiche.",
+    rules: ["Chacun choisit une phrase que l'autre dit tout le temps.", "À tour de rôle, imitez-la avec sa voix et ses gestes.", "Votez ensemble : quelle imitation était la plus ressemblante ?"],
+    points: "1 point pour la meilleure imitation."
+  },
+  {
+    title: "LE GPS HUMAIN", type: "Confiance", text: "Guide l'autre les yeux fermés.",
+    rules: ["L'un ferme les yeux. L'autre choisit un objet de la pièce, sans dire lequel.", "Lancez le chrono. Le guide donne seulement des indications à la voix : « deux pas à gauche », « tends la main »…", "Puis échangez les rôles."],
+    points: "Objet touché avant la sonnerie : 1 point pour le guide.",
+    timer: 60
+  },
+  {
+    title: "NI OUI NI NON", type: "Concentration", text: "Le grand classique : ni oui, ni non.",
+    rules: ["Le joueur indiqué pose des questions rapides et pièges pendant le chrono.", "L'autre répond sans jamais dire « oui » ni « non » (ni « ouais », ni hochement de tête).", "Puis échangez les rôles."],
+    points: "Tenir jusqu'à la sonnerie : 1 point.",
+    timer: 60
+  },
+  {
+    title: "LE SOUVENIR TRUQUÉ", type: "Mémoire", text: "Trouve l'erreur dans l'histoire.",
+    rules: ["L'un raconte un souvenir commun en y glissant une seule erreur.", "À la fin du récit, l'autre doit trouver l'erreur.", "Puis échangez les rôles."],
+    points: "Erreur trouvée : 1 point pour celui qui l'a repérée. Sinon : 1 point pour le conteur."
+  },
+  {
+    title: "L'INVENTAIRE", type: "Observation", text: "Que cache son sac ?",
+    rules: ["Le joueur indiqué lance le chrono et cite tout ce qu'il pense trouver dans le sac ou les poches de l'autre.", "Relancez le chrono pour l'autre.", "Videz ensuite les sacs pour vérifier."],
+    points: "Objet juste : 1 point.",
+    timer: 45, tally: { label: "Objets justes", perPlayer: true }
+  },
+  {
+    title: "LE GOÛT MYSTÈRE", type: "Sens", text: "Goûte les yeux fermés.", need: "quelques aliments de la cuisine",
+    rules: ["L'un ferme les yeux.", "L'autre lui fait goûter un aliment de la cuisine (rien de piquant, ni d'allergène).", "Il a deux essais pour le nommer. Puis échangez."],
+    points: "Aliment trouvé : 1 point."
+  },
+  {
+    title: "LE MÊME CHOIX", type: "Choix simultané", text: "Soirée tranquille ou sortie improvisée ?",
+    rules: ["Comptez « 1, 2, 3 ».", "Dites en même temps : « soirée tranquille » ou « sortie improvisée ».", "Chacun explique son choix en une phrase."],
+    points: "Même choix : 1 point pour chacun."
+  },
+  {
+    title: "QUI LE FERAIT ?", type: "Désignation", text: "Qui se perdrait avec un GPS ?",
+    rules: ["Lisez la question à voix haute.", "Comptez « 1, 2, 3 » et désignez du doigt, en même temps, la personne concernée."],
+    points: "Même personne désignée : 1 point pour chacun."
+  },
+  {
+    title: "TOP 5", type: "Course contre la montre", text: "Cinq choses que vous aimez tous les deux.",
+    rules: ["Lancez le chrono.", "Ensemble, trouvez cinq choses que vous aimez tous les deux. Ajoutez +1 au compteur à chaque trouvaille."],
+    points: "5 trouvées avant la sonnerie : 1 point pour chacun.",
+    timer: 45, tally: { label: "Trouvées", max: 5 }
+  },
+  {
+    title: "MOT INTERDIT", type: "Concentration", text: "Surtout, ne dis pas le mot !",
+    rules: ["Choisissez ensemble un mot courant : « je », « bon », « genre »…", "Lancez le chrono et discutez de ce que vous voulez.", "À chaque fois que quelqu'un dit le mot, l'autre marque un point."],
+    points: "1 point à chaque fois que l'autre prononce le mot.",
+    timer: 60
+  },
+  {
+    title: "CLASSEMENT SECRET", type: "Révélation", text: "Mer, montagne, ville ou campagne ?",
+    rules: ["Chacun classe en secret ces quatre lieux, du préféré au moins aimé, et cache sa réponse.", "Révélez les deux classements.", "Comparez et expliquez vos choix."],
+    points: "Même n°1 : 1 point pour chacun. Classement identique : 2 points chacun.",
+    answers: { count: 2, rows: 4, label: "1. …  2. …  3. …  4. …" }
+  },
+  {
+    title: "DEVINE LE SOUVENIR", type: "Mémoire", text: "Trois indices pour un souvenir.",
+    rules: ["L'un pense à un souvenir commun.", "Il donne un indice à la fois, sans nom de lieu ni de personne.", "L'autre a droit à une seule proposition après chaque indice."],
+    points: "Trouvé au 1er indice : 3 points. Au 2e : 2 points. Au 3e : 1 point."
+  },
+  {
+    title: "DÉFI ALPHABET", type: "Créativité", text: "Un compliment pour chaque lettre.",
+    rules: ["À tour de rôle, dites un mot positif qui décrit l'autre, en suivant l'alphabet : A comme attentionné, B comme beau…", "Relancez le chrono de 10 secondes à chaque mot. On peut passer les lettres difficiles (K, W, X, Y).", "Celui qui sèche à la sonnerie perd."],
+    points: "1 point pour celui qui n'a pas séché.",
+    timer: 10
+  },
+  {
+    title: "UNE HISTOIRE À DEUX", type: "Improvisation", text: "Une phrase chacun.",
+    rules: ["Le joueur indiqué commence par « Il était une fois… ».", "À tour de rôle, ajoutez une seule phrase.", "Après six phrases, donnez un titre à votre histoire."],
+    points: "Une histoire qui tient debout : 1 point pour chacun."
+  },
+
+  // ——— NOUVEAUX : de vrais jeux courts, sans matériel ———
+  {
+    title: "LA BATAILLE DE POUCES", type: "Duel", text: "« 1, 2, 3, 4, je déclare la guerre des pouces ! »",
+    rules: ["Accrochez vos mains droites, doigts repliés, pouces levés.", "Dites la formule ensemble, puis essayez de bloquer le pouce de l'autre sous le vôtre pendant 3 secondes.", "Le premier à 2 manches gagne."],
+    points: "1 point pour le gagnant.",
+    tally: { label: "Manches gagnées", perPlayer: true, max: 2 }
+  },
+  {
+    title: "LE JEU DU 21", type: "Stratégie", text: "Celui qui dit 21 a perdu.",
+    rules: ["Le joueur indiqué commence à compter à partir de 1.", "À tour de rôle, chacun dit 1, 2 ou 3 nombres qui se suivent : touchez +1, +2 ou +3.", "Celui qui est obligé de dire « 21 » perd la manche. Jouez 3 manches."],
+    points: "1 point par manche gagnée.",
+    nim: true
+  },
+  {
+    title: "LE ROI DU SILENCE", type: "Duel", text: "Le premier qui parle a perdu.",
+    rules: ["Dites ensemble « 1, 2, 3, silence ! ».", "Interdit de parler, de rire aux éclats ou de faire un bruit avec la bouche. Grimaces et gestes autorisés.", "Le premier qui craque perd."],
+    points: "1 point pour le gagnant."
+  },
+  {
+    title: "LE MOT CHAÎNÉ", type: "Lettres", text: "Chaque mot commence par la dernière lettre du précédent.",
+    rules: ["Le joueur indiqué dit un mot, par exemple « sapin ».", "L'autre dit un mot qui commence par la dernière lettre (« nuage »), et ainsi de suite. Relancez le chrono de 5 secondes à chaque mot.", "Pas de répétition, pas de nom propre."],
+    points: "Celui qui sèche à la sonnerie perd : 1 point pour l'autre.",
+    timer: 5
+  },
+  {
+    title: "CHICHE ?", type: "Défi", text: "Quelles sont les chances que tu le fasses ?",
+    rules: [
+      "L'un lance un petit défi gentil : « Chiche que tu chantes debout sur le canapé ? »",
+      "L'autre choisit un nombre maximum entre 3 et 10.",
+      "Comptez « 1, 2, 3 » et dites en même temps un nombre entre 1 et ce maximum.",
+      "Même nombre ? Le défi doit être fait ! Puis échangez les rôles."
+    ],
+    points: "Défi réalisé : 1 point pour celui qui l'a fait."
+  },
+  {
+    title: "LE CADAVRE EXQUIS", type: "Surréaliste", text: "La phrase absurde à quatre mains.",
+    rules: ["Chacun écrit à son tour un morceau de phrase, sans voir ce que l'autre a écrit.", "Appuyez sur « Plier et passer » après chaque morceau.", "Dépliez la feuille et lisez votre phrase à voix haute."],
+    points: "Fou rire garanti : 1 point pour chacun.",
+    folded: [
+      { label: "un sujet avec un adjectif", example: "Le chat amoureux" },
+      { label: "un verbe", example: "dévore" },
+      { label: "un complément", example: "un nuage à la vanille" },
+      { label: "un lieu ou un moment", example: "dans l'ascenseur, à minuit" }
+    ]
+  },
+  {
+    title: "LES 5 SECONDES", type: "Rapidité", text: "Trois réponses en cinq secondes.",
+    rules: ["Le joueur indiqué donne un thème à l'autre : « Cite 3 fromages », « 3 pays d'Afrique »…", "Il lance le chrono : l'autre doit donner 3 réponses avant la sonnerie.", "Échangez les rôles. Faites 5 thèmes chacun."],
+    points: "3 réponses avant la sonnerie : 1 point.",
+    timer: 5, tally: { label: "Réussites", perPlayer: true }
+  }
 ];

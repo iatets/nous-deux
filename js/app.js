@@ -14,7 +14,7 @@ const modes = [
  ["expert","🔮","Cartes sans filtre","Des sujets personnels à partager seulement si vous le souhaitez.","NIVEAU EXPERT · FACULTATIF","expert"],
  ["oleole","🌶️","Olé Olé","Sexualité sans tabou. Du soft au très hot, pour les couples qui se connaissent bien.","SANS FILTRE · ADULTE","oleole"],
  ["oreiller","🛏️","Sur l'oreiller","Câlins, confidences et surtout plein de mini-jeux à faire dans le lit. Et ça peut chauffer un peu…","MINI-JEUX AU LIT · 18+","oreiller"],
- ["mini","🎮","Mini-jeux","Pictionary, petit bac, mimes, quiz de couple… Des jeux courts et des jeux plus longs.","38 JEUX · 10 PAR PARTIE","complicite"]
+ ["mini","🎮","Mini-jeux","Tabou, Time's Up, pendu, morpion, petit bac, mimes… Des jeux courts et des jeux plus longs, tout est dans l'appli.",`${MINI_LONG.length+MINI_SHORT.length} JEUX · 10 PAR PARTIE`,"complicite"]
 ];
 const challengeCards = [
  ["MIME EXPRESS","Mime une activité que l'autre adore. L'autre a 3 essais pour deviner.","Défi"],
@@ -28,16 +28,6 @@ const challengeCards = [
  ["DEVINE L'ÉMOTION","Décris une situation sans nommer l'émotion. L'autre essaie de la deviner.","Mini-jeu"],
  ["QUESTION RETOURNÉE","Pose une question à l'autre, puis réponds-y toi aussi.","Complicité"]
 ];
-const miniCards = [
- ["LE MÊME CHOIX","Comptez jusqu'à trois et dites chacun votre réponse : soirée tranquille ou sortie improvisée ?","Choix simultané"],
- ["QUI LE FERAIT ?","Lisez à voix haute : qui serait le plus susceptible de se perdre avec un GPS ? Comptez jusqu'à trois et désignez-vous.","Désignation"],
- ["TOP 5","En 45 secondes, trouvez cinq choses que vous aimez tous les deux.","Course contre la montre"],
- ["MOT INTERDIT","Choisissez un mot courant. Discutez pendant une minute sans le prononcer. Si quelqu'un le dit, l'autre marque un point.","Concentration"],
- ["CLASSEMENT SECRET","Chacun classe mentalement : mer, montagne, ville, campagne. Révélez en même temps et comparez.","Révélation"],
- ["DEVINE LE SOUVENIR","Une personne pense à un souvenir commun et donne trois indices. L'autre doit le retrouver.","Mémoire"],
- ["DÉFI ALPHABET","Trouvez chacun à tour de rôle un mot positif décrivant l'autre, de A à Z. Vous pouvez passer une lettre.","Créativité"],
- ["UNE HISTOIRE À DEUX","Inventez une histoire : une phrase chacun, à tour de rôle, pendant six phrases.","Improvisation"]
-];
 const levels = ["DÉCOUVERTE","COMPLICITÉ","PROFOND","EXPERT"];
 function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$("#"+id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"});}
 function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2200);}
@@ -48,7 +38,7 @@ function startMode(mode){if(ADULT_MODES[mode[0]]&&!state.adultOk){askAdult(mode)
  let cards=[];
  if(mode[0]==="challenge") cards=challengeCards.map(x=>({text:x[1],type:x[2],title:x[0],cat:"Défis",level:"COMPLICITÉ",hint:"Faites le défi ensemble. Vous pouvez l'adapter ou passer."}));
  else if(mode[0]==="mini"){
-   const short=shuffle([...miniCards,...MINI_SHORT]).slice(0,7).map(x=>({text:x[1],type:x[2],title:x[0],hint:"Jouez ensemble, puis attribuez un point à la personne qui a gagné… ou partagez le point !"}));
+   const short=shuffle([...MINI_SHORT]).slice(0,7).map(x=>({...x}));
    const long=shuffle([...MINI_LONG]).slice(0,3).map(x=>({...x,long:true}));
    cards=[...long,...short].map(x=>({...x,cat:"Mini-jeux",level:"COMPLICITÉ"}));
  }
@@ -56,7 +46,7 @@ function startMode(mode){if(ADULT_MODES[mode[0]]&&!state.adultOk){askAdult(mode)
    const qs=shuffle([...OREILLER_QUESTIONS]).slice(0,3).map(text=>({text,type:"SUR L'OREILLER",title:"Sur l'oreiller",hint:"Réponds à voix basse, tout près de l'autre. Puis c'est à son tour de répondre."}));
    const long=shuffle([...OREILLER_LONG]).slice(0,3).map(x=>({...x,long:true,game:true}));
    const [stop,...rest]=OREILLER_SHORT;
-   const short=[stop,...shuffle([...rest]).slice(0,3)].map((x,n)=>({first:n===0,text:x[1],type:x[2],title:x[0],game:true,hint:"Jouez ensemble, puis donnez le point au gagnant… ou partagez-le !"}));
+   const short=[stop,...shuffle([...rest]).slice(0,3)].map((x,n)=>({...x,first:n===0,game:true}));
    cards=[...qs,...long,...short].map(x=>({...x,cat:"Sur l'oreiller",level:"SOUS LA COUETTE"}));
  }
  else if(mode[0]==="truth"){
@@ -87,7 +77,7 @@ function renderScoreboard(){$("#scoreboard").innerHTML=state.players.map((p,i)=>
 function addMiniTimer(parent,seconds){
  const box=make("div","mini-timer"),label=make("span","mini-timer-value"),btn=make("button","secondary-btn mini-btn","Lancer le chrono");
  const reset=()=>{stopMiniTimer();label.textContent=`⏱ ${seconds} s`;label.classList.remove("done");btn.textContent="Lancer le chrono";};
- btn.addEventListener("click",()=>{reset();btn.textContent="Recommencer";let left=seconds;state.miniTimer=setInterval(()=>{left--;label.textContent=`⏱ ${left} s`;if(left<=0){stopMiniTimer();label.textContent="Temps écoulé !";label.classList.add("done");toast("Temps écoulé !");}},1000);});
+ btn.addEventListener("click",()=>{reset();btn.textContent="Recommencer";let left=seconds;state.miniTimer=setInterval(()=>{left--;label.textContent=`⏱ ${left} s`;if(left<=0){stopMiniTimer();label.textContent="Temps écoulé !";label.classList.add("done");toast("Temps écoulé !");if(navigator.vibrate)navigator.vibrate([200,100,200]);}},1000);});
  box.appendChild(label);box.appendChild(btn);parent.appendChild(box);reset();return reset;
 }
 function addMiniCanvas(parent){
@@ -106,28 +96,42 @@ function addMiniCanvas(parent){
 }
 function renderMini(q){
  const area=$("#answerArea");
+ $("#categoryDesc").textContent=q.long?"Un jeu un peu plus long : prenez votre temps !":"Un jeu rapide, en une seule manche.";
+ $("#questionHint").textContent=q.need?`À prévoir : ${q.need}.`:"";
+ addRules(area,q);
+ let i=0;
+ const who=k=>state.players[(state.turn+k)%2];
+ const current=()=>q.alternate?who(i):state.players[state.turn];
+ const resets=[];
  if(q.long){
-  $("#categoryDesc").textContent="Un jeu un peu plus long : prenez votre temps !";
   if(q.board){const ul=make("ul","mini-board");q.board.forEach(t=>ul.appendChild(make("li","",t)));area.appendChild(ul);}
-  const steps=q.count?shuffle([...q.rounds]).slice(0,q.count):q.rounds;
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  const steps=q.dice?Array.from({length:q.count},()=>`${pick(q.dice[0])} ${pick(q.dice[1])}`):q.sets?pick(q.sets):q.count?shuffle([...q.rounds]).slice(0,q.count):q.rounds;
   const box=make("div","mini-step"),head=make("div","mini-step-head"),prompt=make("div","mini-step-text"),row=make("div","mini-step-actions");
-  const reveal=make("button","secondary-btn mini-btn","Voir le mot"),nextStep=make("button","secondary-btn mini-btn","Étape suivante →");
+  const reveal=make("button","secondary-btn mini-btn","Voir le mot"),nextStep=make("button","secondary-btn mini-btn",q.nextLabel||"Étape suivante →");
   box.appendChild(head);box.appendChild(prompt);box.appendChild(row);if(q.secret)row.appendChild(reveal);row.appendChild(nextStep);area.appendChild(box);
-  const resetTimer=q.timer?addMiniTimer(area,q.timer):null,wipe=q.canvas?addMiniCanvas(area):null;
-  let i=0,shown=false;
+  let shown=false;
   const paint=()=>{
-   const who=q.alternate?` · À ${state.players[(state.turn+i)%2]} de jouer`:"";
-   head.textContent=`${q.stepLabel} ${i+1} / ${steps.length}${who}`;
+   const turn=q.alternate?` · À ${who(i)} de jouer`:"";
+   head.textContent=`${q.stepLabel} ${i+1} / ${steps.length}${turn}`;
    prompt.textContent=q.secret&&!shown?"••••••":steps[i];
    reveal.textContent=shown?"Cacher":"Voir le mot";
    nextStep.style.display=i<steps.length-1?"":"none";
   };
   reveal.addEventListener("click",()=>{shown=!shown;paint();});
-  nextStep.addEventListener("click",()=>{i++;shown=false;if(resetTimer)resetTimer();if(wipe)wipe();paint();});
+  nextStep.addEventListener("click",()=>{i++;shown=false;resets.forEach(r=>r());paint();});
   paint();
  }
+ if(q.timer)resets.push(addMiniTimer(area,q.timer));
+ if(q.canvas)resets.push(addMiniCanvas(area));
+ if(q.tally){const r=addTally(area,q.tally);if(!q.tally.keep)resets.push(r);}
+ if(q.answers)resets.push(addAnswers(area,q.answers,k=>q.answers.count===1?current():who(k+(q.alternate?i:0))));
+ if(q.folded)addFolded(area,q.folded,k=>who(k));
+ if(q.tictactoe)resets.push(addTicTacToe(area,current));
+ if(q.hangman)resets.push(addHangman(area,current));
+ if(q.nim)addNim(area,current);
  const pts=make("div","mini-points");
- state.players.forEach((p,n)=>{const b=make("button","secondary-btn mini-btn",`+1 ${p}`);b.addEventListener("click",()=>{state.scores[n]++;renderScoreboard();});pts.appendChild(b);});
+ state.players.forEach((p,n)=>{const b=make("button","secondary-btn mini-btn",`+1 ${p}`);b.addEventListener("click",()=>{state.scores[n]++;renderScoreboard();toast(`+1 pour ${p}`);});pts.appendChild(b);});
  area.appendChild(pts);
 }
 function showDare(){const d=state.dares[state.dareIndex++%state.dares.length];state.dare=d;$("#cardType").textContent=d.later?"DÉFI · POUR PLUS TARD":"DÉFI · MAINTENANT";$("#questionText").textContent=d.text;$("#questionHint").textContent=d.later?"Ce défi s'ajoute à votre liste de fin de partie.":"À faire tout de suite… ou à garder pour plus tard.";$("#categoryDesc").textContent="Raté ! Place au défi de couple.";$("#answerArea").innerHTML="";$("#validateBtn").textContent=d.later?"Noté pour plus tard ✓":"Défi réussi ✓";$("#skipBtn").textContent=d.later?"Passer ce défi ↗":"Plus tard ⏳";$("#passBtn").style.display=d.later?"none":"";}

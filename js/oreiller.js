@@ -1,7 +1,6 @@
 // Sur l'oreiller : questions et mini-jeux à faire dans le lit, à deux.
 // Une partie = 3 questions + 3 jeux longs + 4 jeux courts, mélangés.
-// Les jeux longs utilisent les mêmes champs que MINI_LONG (voir mini-jeux.js).
-// Les jeux courts : [TITRE, consigne, étiquette].
+// Les jeux utilisent les mêmes champs que les mini-jeux (voir mini-jeux.js).
 
 const OREILLER_QUESTIONS = [
   // ——— CÂLINS & SOMMEIL ———
@@ -76,7 +75,12 @@ const OREILLER_QUESTIONS = [
 const OREILLER_LONG = [
   {
     title: "DESSINE SUR MON DOS", type: "Toucher", text: "Du bout du doigt, sur la peau.",
-    hint: "Chacun votre tour : regarde le mot sans le montrer, puis dessine-le du bout du doigt sur le dos de l'autre. Il a 3 essais pour deviner. Bonne réponse : 1 point pour chacun.",
+    rules: [
+      "Celui qui devine s'allonge sur le ventre, le dos nu ou en t-shirt fin.",
+      "Le joueur indiqué appuie sur « Voir le mot », lance le chrono et trace le mot lentement, du bout du doigt, sur le dos de l'autre (une lettre à la fois pour les mots).",
+      "L'autre a 3 essais pour deviner."
+    ],
+    points: "Trouvé : 1 point pour chacun.",
     timer: 45, secret: true, alternate: true, count: 6, stepLabel: "Dessin",
     rounds: [
       "Un cœur", "Une étoile", "Un soleil", "Une lune", "Un smiley", "Une maison",
@@ -86,7 +90,12 @@ const OREILLER_LONG = [
   },
   {
     title: "OÙ T'AI-JE EMBRASSÉ ?", type: "Yeux fermés", text: "Un bisou, un seul indice : la sensation.",
-    hint: "Celui qui ne joue pas ferme les yeux. L'autre regarde l'endroit indiqué, puis y dépose un bisou. Trouvé du premier coup : 1 point pour chacun. Chacun peut dire « pas là » à tout moment.",
+    rules: [
+      "Celui qui devine ferme les yeux.",
+      "Le joueur indiqué appuie sur « Voir le mot » et dépose un bisou à l'endroit indiqué.",
+      "L'autre dit où, en un seul essai. Chacun peut dire « pas là » à tout moment."
+    ],
+    points: "Trouvé du premier coup : 1 point pour chacun.",
     secret: true, alternate: true, count: 6, stepLabel: "Bisou",
     rounds: [
       "Le creux du poignet", "La paume de la main", "Le bout du nez", "Une paupière", "Le lobe de l'oreille", "La nuque",
@@ -96,7 +105,12 @@ const OREILLER_LONG = [
   },
   {
     title: "LE MASSAGE À LA CARTE", type: "Détente", text: "Une minute de massage, pas une seconde de moins.",
-    hint: "Chacun votre tour, offrez le massage indiqué pendant que le chrono tourne. Celui qui reçoit donne une note sur 10 : 8 ou plus, 1 point pour le masseur.",
+    rules: [
+      "Le joueur indiqué lit le massage, lance le chrono et masse l'autre jusqu'à la sonnerie.",
+      "Celui qui reçoit peut guider : « plus fort », « plus doux », « là ».",
+      "À la sonnerie, il donne une note sur 10."
+    ],
+    points: "Note de 8/10 ou plus : 1 point pour le masseur.",
     timer: 60, alternate: true, count: 4, stepLabel: "Massage",
     rounds: [
       "Massage des mains, doigt par doigt", "Massage des pieds", "Massage de la nuque et des épaules", "Massage du crâne, dans les cheveux",
@@ -106,7 +120,12 @@ const OREILLER_LONG = [
   },
   {
     title: "LE CHEF D'ORCHESTRE", type: "Guider", text: "Tu donnes les ordres, l'autre obéit.",
-    hint: "Le joueur indiqué guide l'autre uniquement à la voix : « plus lentement », « plus haut », « encore »… L'autre suit à la lettre jusqu'à la fin du chrono. Si tout s'est bien passé, 1 point pour chacun.",
+    rules: [
+      "Le joueur indiqué est le chef : il lit la consigne et lance le chrono.",
+      "Il guide l'autre uniquement à la voix : « plus lentement », « plus haut », « encore », « stop ».",
+      "L'autre obéit à la lettre jusqu'à la sonnerie."
+    ],
+    points: "Chef satisfait : 1 point pour chacun.",
     timer: 60, alternate: true, count: 4, stepLabel: "Partition",
     rounds: [
       "Guide ses caresses sur ton dos", "Guide ses bisous dans ton cou", "Guide ses mains dans tes cheveux", "Guide son massage de tes épaules",
@@ -115,8 +134,13 @@ const OREILLER_LONG = [
     ]
   },
   {
-    title: "LE TRÉSOR SOUS LA COUETTE", type: "Cache-cache", text: "Chaud… tiède… brûlant !",
-    hint: "Celui qui cache glisse l'objet indiqué quelque part sur lui ou sous la couette. L'autre cherche les yeux fermés, avec les mains. Le seul indice autorisé : « froid », « chaud » ou « brûlant ». Trouvé avant le chrono : 1 point pour le chercheur.",
+    title: "LE TRÉSOR SOUS LA COUETTE", type: "Cache-cache", text: "Froid… tiède… brûlant !",
+    rules: [
+      "L'autre ferme les yeux pendant que le joueur indiqué cache l'objet sur lui ou sous la couette.",
+      "Lancez le chrono. Le chercheur fouille avec les mains, les yeux toujours fermés.",
+      "Seuls indices autorisés : « froid », « tiède », « chaud » ou « brûlant »."
+    ],
+    points: "Trouvé avant la sonnerie : 1 point pour le chercheur. Sinon : 1 point pour celui qui a caché.",
     timer: 60, alternate: true, count: 4, stepLabel: "Trésor",
     rounds: [
       "Cache une chaussette", "Cache une bague ou un bracelet", "Cache un bonbon", "Cache un élastique à cheveux",
@@ -124,8 +148,13 @@ const OREILLER_LONG = [
     ]
   },
   {
-    title: "LE QUIZ EFFEUILLÉ", type: "Quiz coquin", text: "Mauvaise réponse ? Un vêtement en moins.",
-    hint: "Chacun votre tour, réponds à la question sur l'autre. Bonne réponse : 1 point. Mauvaise réponse : tu enlèves un vêtement (ou tu donnes un bisou si tu n'as plus rien à enlever).",
+    title: "LE QUIZ EFFEUILLÉ", type: "Strip quiz", text: "Mauvaise réponse ? Un vêtement en moins.",
+    rules: [
+      "Le joueur indiqué lit la question et répond à voix haute, à propos de l'autre.",
+      "L'autre dit si c'est juste.",
+      "Mauvaise réponse : il enlève un vêtement de son choix. Plus rien à enlever ? Il donne un bisou là où l'autre le décide."
+    ],
+    points: "Bonne réponse : 1 point.",
     alternate: true, count: 8, stepLabel: "Question",
     rounds: [
       "Quelle est sa position préférée pour dormir ?", "De quel côté du lit dort-il ou elle ?", "Quelle est sa tenue de nuit préférée ?",
@@ -137,7 +166,12 @@ const OREILLER_LONG = [
   },
   {
     title: "TU PRÉFÈRES… SOUS LA COUETTE", type: "Choix simultané", text: "Répondez en même temps, sans réfléchir.",
-    hint: "Lisez les deux choix, comptez jusqu'à trois et répondez ensemble. Même réponse : 1 point pour chacun. Réponse différente : à vous de négocier…",
+    rules: [
+      "Lisez les deux choix à voix haute.",
+      "Comptez « 1, 2, 3 » et dites votre choix en même temps.",
+      "Réponses différentes ? À vous de négocier…"
+    ],
+    points: "Même réponse : 1 point pour chacun.",
     count: 8, stepLabel: "Choix",
     rounds: [
       "Tu préfères un câlin cuillère ou face à face ?", "Tu préfères la grasse matinée ou le réveil avec des bisous ?", "Tu préfères une couette chacun ou une seule pour deux ?",
@@ -149,7 +183,12 @@ const OREILLER_LONG = [
   },
   {
     title: "QUI DE NOUS DEUX… AU LIT ?", type: "Désignation", text: "Comptez jusqu'à trois et désignez-vous.",
-    hint: "Lisez la question, comptez jusqu'à trois, puis montrez la bonne personne en même temps. Si vous êtes d'accord, 1 point pour chacun.",
+    rules: [
+      "Lisez la question à voix haute.",
+      "Comptez « 1, 2, 3 » et pointez du doigt, en même temps, la bonne personne.",
+      "Pas d'accord ? Chacun défend son choix en une phrase."
+    ],
+    points: "Même personne désignée : 1 point pour chacun.",
     count: 10, stepLabel: "Question",
     rounds: [
       "Qui de nous deux s'endort le premier ?", "Qui de nous deux ronfle le plus ?", "Qui de nous deux vole la couette ?",
@@ -161,8 +200,14 @@ const OREILLER_LONG = [
   },
   {
     title: "JE N'AI JAMAIS… SUR L'OREILLER", type: "Aveux", text: "Si tu l'as déjà fait, tu payes un bisou.",
-    hint: "Lisez la phrase à voix haute. Celui qui l'a déjà fait donne un bisou à l'autre, où l'autre le veut. Celui qui a donné le moins de bisous à la fin gagne… ou perd, à vous de voir !",
+    rules: [
+      "Lisez la phrase à voix haute.",
+      "Celui qui l'a déjà fait donne un bisou à l'autre, là où l'autre le décide, et ajoute +1 à son compteur.",
+      "Raconter l'histoire est facultatif : le mystère est permis."
+    ],
+    points: "À la fin, celui qui a donné le moins de bisous prend 1 point.",
     count: 8, stepLabel: "Aveu",
+    tally: { label: "Bisous donnés", perPlayer: true, keep: true },
     rounds: [
       "Je n'ai jamais fait semblant de dormir pour éviter de me lever.", "Je n'ai jamais rêvé de toi de façon très coquine.", "Je n'ai jamais volé la couette exprès.",
       "Je n'ai jamais pensé à toi en me réveillant seul(e).", "Je n'ai jamais dormi complètement nu(e) avec toi.", "Je n'ai jamais eu envie de toi en pleine nuit sans te le dire.",
@@ -173,8 +218,13 @@ const OREILLER_LONG = [
   },
   {
     title: "L'HISTOIRE QUI CHAUFFE", type: "Improvisation", text: "Une phrase chacun, de plus en plus chaude.",
-    hint: "Lisez le début de l'histoire, puis continuez-la une phrase chacun, à voix basse, à l'oreille de l'autre. Chaque phrase doit être un peu plus chaude que la précédente. Le premier qui rit perd le point.",
-    timer: 90, alternate: true, count: 3, stepLabel: "Histoire",
+    rules: [
+      "Le joueur indiqué lit le début de l'histoire à l'oreille de l'autre.",
+      "À tour de rôle, ajoutez une phrase à voix basse, chacune un peu plus chaude que la précédente. Relancez le chrono de 20 secondes à chaque phrase.",
+      "Celui qui rit ou qui sèche à la sonnerie perd."
+    ],
+    points: "1 point pour celui qui n'a pas craqué.",
+    timer: 20, alternate: true, count: 3, stepLabel: "Histoire",
     rounds: [
       "« Il pleuvait, la porte de la chambre d'hôtel venait de se refermer… »", "« Le dernier métro était parti, il ne restait qu'un taxi et une seule adresse… »",
       "« Elle avait laissé un petit mot sur l'oreiller : rejoins-moi à minuit… »", "« Le chalet était coupé du monde, et il n'y avait qu'un seul lit… »",
@@ -183,39 +233,240 @@ const OREILLER_LONG = [
   },
   {
     title: "LES SENS EN ÉVEIL", type: "Yeux bandés", text: "Fermez les yeux, laissez faire.",
-    hint: "Celui qui reçoit ferme les yeux (ou met un foulard). L'autre fait ce qui est indiqué. Celui qui reçoit doit deviner ce qui se passe. Bonne réponse : 1 point pour chacun.",
-    timer: 45, alternate: true, count: 5, stepLabel: "Sensation",
+    rules: [
+      "Celui qui reçoit ferme les yeux (ou met un foulard).",
+      "Le joueur indiqué appuie sur « Voir le mot », lance le chrono et fait ce qui est demandé.",
+      "L'autre doit deviner ce qu'il a senti, goûté, entendu ou touché."
+    ],
+    points: "Bonne réponse : 1 point pour chacun.",
+    timer: 45, secret: true, alternate: true, count: 5, stepLabel: "Sensation",
     rounds: [
       "Fais-lui sentir quelque chose de la maison", "Fais-lui goûter quelque chose de sucré", "Passe un objet doux sur son bras", "Souffle doucement à un endroit de son corps",
       "Passe tes cheveux sur sa peau", "Fais-lui écouter un son de la pièce", "Pose quelque chose de froid sur sa peau", "Caresse-le ou la avec un tissu",
       "Fais-lui sentir ton parfum à un endroit de ton cou", "Fais-lui deviner avec quelle partie de ton corps tu le ou la touches"
     ]
+  },
+
+  // ——— NOUVEAUX : de vrais jeux coquins pour couple ———
+  {
+    title: "LES DÉS COQUINS", type: "Hasard", text: "Deux dés : une action, un endroit.",
+    rules: [
+      "Les dés sont lancés : une action et un endroit du corps.",
+      "Le joueur indiqué lance le chrono et fait l'action, à cet endroit, sur l'autre, jusqu'à la sonnerie.",
+      "Un endroit ne plaît pas ? Celui qui reçoit dit « relance » : on relance les dés, sans discuter."
+    ],
+    points: "Pas de perdant : 1 point pour chacun si vous allez au bout des lancers.",
+    timer: 30, alternate: true, count: 8, stepLabel: "Lancer", nextLabel: "Relancer les dés 🎲",
+    dice: [
+      ["Embrasse", "Caresse", "Masse", "Souffle sur", "Mordille doucement", "Effleure du bout des doigts", "Lèche", "Chatouille"],
+      ["le cou", "l'oreille", "le ventre", "la nuque", "les lèvres", "l'intérieur du poignet", "le bas du dos", "les épaules", "la cuisse", "le torse", "la hanche", "l'endroit de ton choix"]
+    ]
+  },
+  {
+    title: "ACTION OU VÉRITÉ COQUIN", type: "Classique", text: "Action ou vérité ? Tu choisis, tu assumes.",
+    rules: [
+      "Le joueur indiqué annonce à voix haute : « action » ou « vérité ».",
+      "Lisez sur la carte la partie choisie : V pour vérité, A pour action.",
+      "Il répond franchement ou fait l'action. Refuser est permis : il enlève alors un vêtement."
+    ],
+    points: "Vérité dite ou action faite : 1 point.",
+    alternate: true, count: 8, stepLabel: "Carte",
+    rounds: [
+      "V : Quel est ton fantasme le plus inavouable ?  ·  A : Embrasse-moi 20 secondes sans utiliser les mains.",
+      "V : Quelle est la première chose que tu as remarquée chez moi ?  ·  A : Enlève-moi un vêtement avec les dents.",
+      "V : Où aimerais-tu qu'on le fasse au moins une fois ?  ·  A : Fais-moi un massage du cou d'une minute.",
+      "V : Quel est ton meilleur souvenir coquin avec moi ?  ·  A : Chuchote-moi à l'oreille ce que tu veux me faire ce soir.",
+      "V : Qu'est-ce qui t'excite le plus chez moi ?  ·  A : Fais-moi un strip-tease de 30 secondes (en musique, c'est mieux).",
+      "V : As-tu déjà pensé à moi au travail de façon pas très sage ?  ·  A : Embrasse-moi à trois endroits que je choisis.",
+      "V : Quelle tenue aimerais-tu me voir porter ?  ·  A : Mets-toi en sous-vêtements jusqu'au prochain tour.",
+      "V : Qu'est-ce que tu n'as jamais osé me demander au lit ?  ·  A : Laisse-moi te bander les yeux jusqu'au prochain tour.",
+      "V : Quel mot doux ou cru t'allume le plus ?  ·  A : Mordille mon oreille pendant 10 secondes.",
+      "V : Plutôt dominer ou être dominé(e) ?  ·  A : Donne-moi un ordre que je dois exécuter tout de suite.",
+      "V : Quelle est ta zone la plus sensible ?  ·  A : Fais glisser tes lèvres de mon cou à mon nombril.",
+      "V : Quelle est la chose la plus folle que tu aimerais essayer avec moi ?  ·  A : Danse collé(e) contre moi pendant toute une chanson."
+    ]
+  },
+  {
+    title: "7 MINUTES AU PARADIS", type: "Classique", text: "Sept minutes. Des bisous. Pas un mot.",
+    rules: [
+      "Lancez le chrono de 7 minutes.",
+      "Bisous, câlins et caresses autorisés, selon vos envies… mais interdit de parler.",
+      "Le premier qui dit un mot avant la sonnerie perd."
+    ],
+    points: "1 point pour celui qui a gardé le silence.",
+    timer: 420, stepLabel: "Paradis",
+    rounds: ["C'est parti : plus un mot !"]
   }
 ];
 
 const OREILLER_SHORT = [
-  ["LE MOT-STOP", "Avant de jouer, choisissez ensemble un mot rigolo qui veut dire « on arrête », sans discussion. Puis scellez-le avec un bisou.", "Avant tout"],
-  ["LE REGARD", "Allongés face à face, à 20 centimètres, regardez-vous dans les yeux pendant une minute, sans parler. Le premier qui rit ou détourne les yeux perd.", "Duel"],
-  ["QUI CRAQUE EN PREMIER ?", "Face à face, rapprochez vos lèvres millimètre par millimètre… sans vous embrasser. Le premier qui craque et embrasse l'autre a perdu.", "Tentation"],
-  ["LA CUILLÈRE BAVARDE", "Mettez-vous en cuillère. Celui qui est derrière chuchote trois choses qu'il aime chez l'autre. Puis échangez les places.", "Tendresse"],
-  ["LE SOUFFLE", "L'un reste immobile, les yeux fermés. L'autre souffle doucement sur sa nuque, son oreille et son ventre pendant 30 secondes. S'il frissonne ou bouge, il perd.", "Résistance"],
-  ["LE BAISER AU RALENTI", "Faites un baiser qui dure 30 secondes, le plus lentement possible. Interdit d'accélérer.", "Douceur"],
-  ["LA BATAILLE D'OREILLERS", "Trois manches de bataille d'oreillers. Le gagnant choisit le prochain câlin.", "Duel"],
-  ["LA VOIX DE VELOURS", "Chacun lit la notice d'un objet de la chambre avec la voix la plus sensuelle possible. Le premier qui éclate de rire perd.", "Fou rire"],
-  ["LA COUETTE CONQUISE", "Chacun tient un bout de la couette. À trois, le premier qui récupère toute la couette gagne… et doit la partager avec un câlin.", "Duel"],
-  ["LA PLUME", "Du bout des ongles, l'un caresse très lentement le bras puis le dos de l'autre. L'autre doit tenir 45 secondes sans rire ni bouger.", "Résistance"],
-  ["LE STRIP PIERRE-FEUILLE-CISEAUX", "Au meilleur des cinq manches. À chaque manche perdue, un vêtement en moins (ou un bisou, si vous préférez).", "Coquin"],
-  ["LE BAISER À LA CARTE", "L'un annonce un type de bisou (papillon, esquimau, dans le cou, langoureux, surprise…), l'autre l'exécute. Trois chacun.", "Bisous"],
-  ["TROIS ENDROITS", "Chacun montre trois endroits où il aime être embrassé. L'autre s'exécute, sans se presser.", "Bisous"],
-  ["LE PILOTE", "Sans parler, l'un guide la main de l'autre là où il aime être caressé, pendant une minute. Puis échangez les rôles.", "Guider"],
-  ["LE FANTASME CHUCHOTÉ", "Chacun chuchote à l'oreille de l'autre une envie ou un fantasme, en une seule phrase. Interdit de commenter, juste un bisou pour dire merci.", "Confidence"],
-  ["LE FRISSONOMÈTRE", "L'un caresse trois endroits du corps de l'autre. L'autre donne une note de frisson de 1 à 10 pour chacun. Le meilleur endroit gagne un bisou de plus.", "Toucher"],
-  ["SANS LES MAINS", "Interdit d'utiliser les mains : l'un doit enlever une chaussette, un bracelet ou un élastique à l'autre en moins d'une minute.", "Défi"],
-  ["LE NOM DE CODE", "Inventez ensemble un mot de code discret pour vous dire « j'ai envie de toi » devant les autres.", "Complicité"],
-  ["LA RESPIRATION", "Une minute de câlin sans parler, en essayant de respirer exactement au même rythme.", "Tendresse"],
-  ["LE PREMIER QUI BOUGE", "Allongés l'un contre l'autre, l'un pose doucement sa main où il veut. Le premier qui bouge ou qui rit pendant 30 secondes perd.", "Tentation"],
-  ["LE COMPLIMENT DE LA PEAU", "Chacun fait trois compliments très précis sur le corps de l'autre, à l'oreille. Interdit de dire « tout » !", "Compliments"],
-  ["LA CHATOUILLE FATALE", "Trouvez l'endroit le plus chatouilleux de l'autre en 30 secondes. Puis échangez. Celui qui crie le plus fort perd.", "Fou rire"],
-  ["LE RÉVEIL IDÉAL", "Chacun décrit en trois phrases comment il aimerait être réveillé demain matin. L'autre choisit s'il relève le défi.", "Demain matin"],
-  ["LE DERNIER VÊTEMENT", "Chacun choisit un vêtement que l'autre doit lui enlever, lentement, sans rien dire.", "Coquin"]
+  {
+    title: "LE MOT-STOP", type: "Avant tout", text: "Un mot pour tout arrêter, sans discussion.",
+    rules: [
+      "Choisissez ensemble un mot rigolo qu'on ne dirait jamais par hasard : « ananas », « pastèque »…",
+      "Si l'un de vous le dit pendant la partie, on arrête le jeu en cours tout de suite, sans se justifier.",
+      "Scellez le pacte avec un bisou."
+    ],
+    points: "Mot choisi : 1 point pour chacun."
+  },
+  {
+    title: "LE REGARD", type: "Duel", text: "Une minute les yeux dans les yeux.",
+    rules: ["Allongez-vous face à face, à 20 centimètres, et lancez le chrono.", "Regardez-vous dans les yeux sans parler.", "Le premier qui rit ou détourne le regard perd."],
+    points: "1 point pour le gagnant. Tenu tous les deux : 1 point chacun.",
+    timer: 60
+  },
+  {
+    title: "QUI CRAQUE EN PREMIER ?", type: "Tentation", text: "Si près… sans s'embrasser.",
+    rules: ["Face à face, rapprochez vos lèvres millimètre par millimètre.", "Interdit de s'embrasser ; les mains restent sur le lit.", "Le premier qui craque et embrasse l'autre a perdu."],
+    points: "1 point pour celui qui a résisté."
+  },
+  {
+    title: "LA CUILLÈRE BAVARDE", type: "Tendresse", text: "Trois mots doux, dans le dos.",
+    rules: ["Mettez-vous en cuillère.", "Celui qui est derrière chuchote trois choses qu'il aime chez l'autre.", "Échangez les places et recommencez."],
+    points: "1 point pour chacun."
+  },
+  {
+    title: "LE SOUFFLE", type: "Résistance", text: "Surtout, ne frissonne pas !",
+    rules: ["L'un s'allonge, immobile, les yeux fermés. Lancez le chrono.", "L'autre souffle doucement sur sa nuque, son oreille et son ventre.", "S'il frissonne ou bouge avant la sonnerie, il perd. Puis échangez."],
+    points: "Tenir jusqu'à la sonnerie : 1 point.",
+    timer: 30
+  },
+  {
+    title: "LE BAISER AU RALENTI", type: "Douceur", text: "Un baiser de 30 secondes.",
+    rules: ["Lancez le chrono et embrassez-vous.", "Le baiser doit durer jusqu'à la sonnerie, le plus lentement possible.", "Celui qui accélère ou s'arrête avant perd."],
+    points: "Tenu jusqu'au bout : 1 point pour chacun.",
+    timer: 30
+  },
+  {
+    title: "LA BATAILLE D'OREILLERS", type: "Duel", text: "Le gagnant choisit le prochain câlin.",
+    rules: ["Chacun prend un oreiller.", "Lancez le chrono : bataille ! On vise le corps, jamais la tête.", "À la sonnerie, désignez ensemble le gagnant de la manche. Premier à 2 manches."],
+    points: "1 point pour le gagnant… et le choix du câlin.",
+    timer: 15, tally: { label: "Manches gagnées", perPlayer: true, max: 2 }
+  },
+  {
+    title: "LA VOIX DE VELOURS", type: "Fou rire", text: "La notice la plus sexy du monde.",
+    rules: ["Prenez un objet de la chambre avec une étiquette ou une notice.", "Chacun à son tour en lit quelques lignes avec la voix la plus sensuelle possible.", "Le premier qui éclate de rire perd."],
+    points: "1 point pour le gagnant."
+  },
+  {
+    title: "LA COUETTE CONQUISE", type: "Duel", text: "Toute la couette pour soi… ou presque.",
+    rules: ["Chacun attrape un bout de la couette.", "À « 3 », tirez ! Le premier qui récupère toute la couette gagne.", "Le gagnant doit ensuite la partager… avec un câlin."],
+    points: "1 point pour le gagnant."
+  },
+  {
+    title: "LA PLUME", type: "Résistance", text: "45 secondes sans rire.",
+    rules: ["L'un s'allonge sur le ventre. Lancez le chrono.", "L'autre lui caresse très lentement le bras puis le dos, du bout des ongles.", "Il doit tenir jusqu'à la sonnerie sans rire ni bouger. Puis échangez."],
+    points: "Tenir jusqu'à la sonnerie : 1 point.",
+    timer: 45
+  },
+  {
+    title: "LE STRIP PIERRE-FEUILLE-CISEAUX", type: "Coquin", text: "Chaque manche perdue coûte un vêtement.",
+    rules: ["Jouez à pierre-feuille-ciseaux.", "Le perdant de chaque manche enlève un vêtement de son choix (ou donne un bisou, si vous préférez).", "Notez les manches gagnées : le premier à 3 gagne."],
+    points: "1 point pour le gagnant.",
+    tally: { label: "Manches gagnées", perPlayer: true, max: 3 }
+  },
+  {
+    title: "LE BAISER À LA CARTE", type: "Bisous", text: "Commande ton bisou.",
+    rules: ["L'un annonce un type de bisou : papillon (avec les cils), esquimau (nez contre nez), dans le cou, langoureux, surprise…", "L'autre l'exécute.", "Trois commandes chacun."],
+    points: "1 point pour chacun."
+  },
+  {
+    title: "TROIS ENDROITS", type: "Bisous", text: "Montre où tu veux tes bisous.",
+    rules: ["Chacun montre trois endroits où il aime être embrassé.", "L'autre embrasse chaque endroit, sans se presser.", "Puis échangez."],
+    points: "1 point pour chacun."
+  },
+  {
+    title: "LE PILOTE", type: "Guider", text: "Guide sa main, sans un mot.",
+    rules: ["L'un prend la main de l'autre et lance le chrono.", "Il la guide là où il aime être caressé, sans parler, jusqu'à la sonnerie.", "Puis échangez les rôles."],
+    points: "1 point pour chacun.",
+    timer: 60
+  },
+  {
+    title: "LE FANTASME CHUCHOTÉ", type: "Confidence", text: "Une envie, une phrase, à l'oreille.",
+    rules: ["Chacun à son tour chuchote à l'oreille de l'autre une envie ou un fantasme, en une seule phrase.", "Interdit de commenter ou de juger : on répond juste par un bisou.", "On peut passer son tour, sans explication."],
+    points: "1 point pour chacun."
+  },
+  {
+    title: "LE FRISSONOMÈTRE", type: "Toucher", text: "Note tes frissons de 1 à 10.",
+    rules: ["L'un caresse trois endroits du corps de l'autre, l'un après l'autre.", "L'autre donne une note de frisson de 1 à 10 pour chaque endroit.", "Puis échangez."],
+    points: "L'endroit le mieux noté gagne un bisou bonus. 1 point pour la meilleure note."
+  },
+  {
+    title: "SANS LES MAINS", type: "Défi", text: "Une minute, zéro main.",
+    rules: ["L'un choisit un accessoire que l'autre doit lui enlever : chaussette, bracelet, élastique…", "Lancez le chrono : l'autre doit l'enlever sans utiliser ses mains.", "Puis échangez."],
+    points: "Réussi avant la sonnerie : 1 point.",
+    timer: 60
+  },
+  {
+    title: "LE NOM DE CODE", type: "Complicité", text: "Un mot secret pour « j'ai envie de toi ».",
+    rules: ["Chacun écrit en secret un mot ou un geste discret qui voudra dire « j'ai envie de toi ».", "Révélez vos propositions et choisissez ensemble la meilleure.", "Utilisez-la au moins une fois cette semaine, devant les autres."],
+    points: "1 point pour celui dont la proposition est choisie.",
+    answers: { count: 2, rows: 1, label: "Ton mot de code" }
+  },
+  {
+    title: "LA RESPIRATION", type: "Tendresse", text: "Une minute, un seul souffle.",
+    rules: ["Collez-vous l'un contre l'autre et lancez le chrono.", "Sans parler, essayez de respirer exactement au même rythme jusqu'à la sonnerie."],
+    points: "Synchronisés jusqu'au bout : 1 point pour chacun.",
+    timer: 60
+  },
+  {
+    title: "LE PREMIER QUI BOUGE", type: "Tentation", text: "Immobiles… malgré la main.",
+    rules: ["Allongez-vous l'un contre l'autre et lancez le chrono.", "L'un pose doucement sa main où il veut sur l'autre.", "Le premier qui bouge ou qui rit avant la sonnerie perd. Puis échangez."],
+    points: "1 point pour le gagnant.",
+    timer: 30
+  },
+  {
+    title: "LE COMPLIMENT DE LA PEAU", type: "Compliments", text: "Trois compliments très précis.",
+    rules: ["Chacun fait trois compliments sur le corps de l'autre, à l'oreille.", "Ils doivent être précis : « le grain de beauté sur ta nuque » plutôt que « tout ».", "Un compliment trop vague ne compte pas."],
+    points: "Trois compliments valables : 1 point."
+  },
+  {
+    title: "LA CHATOUILLE FATALE", type: "Fou rire", text: "Trouve son point faible.",
+    rules: ["Le joueur indiqué lance le chrono et cherche l'endroit le plus chatouilleux de l'autre.", "Relancez le chrono et échangez.", "Celui qui a crié ou ri le plus fort perd."],
+    points: "1 point pour le gagnant.",
+    timer: 30
+  },
+  {
+    title: "LE RÉVEIL IDÉAL", type: "Demain matin", text: "Comment veux-tu être réveillé(e) demain ?",
+    rules: ["Chacun décrit en trois phrases son réveil idéal pour demain matin.", "L'autre dit s'il relève le défi."],
+    points: "Défi accepté : 1 point… à condition de le faire !"
+  },
+  {
+    title: "LE DERNIER VÊTEMENT", type: "Coquin", text: "Lentement, sans un mot.",
+    rules: ["Chacun choisit un vêtement que l'autre doit lui enlever.", "L'autre l'enlève très lentement, sans parler.", "Puis échangez."],
+    points: "1 point pour chacun."
+  },
+
+  // ——— NOUVEAUX ———
+  {
+    title: "LE GLAÇON", type: "Classique", text: "Passe-le sans le faire tomber.", need: "un glaçon",
+    rules: ["L'un prend un glaçon entre ses lèvres.", "Faites-le passer de bouche à bouche, sans les mains, jusqu'à ce qu'il fonde.", "Bonus : faites-le glisser sur le cou de l'autre avant de le lui passer."],
+    points: "Celui qui fait tomber le glaçon donne 1 point à l'autre."
+  },
+  {
+    title: "NI OUI NI NON… COQUIN", type: "Concentration", text: "Chaque « oui » ou « non » coûte un vêtement.",
+    rules: ["Le joueur indiqué lance le chrono et pose des questions coquines.", "L'autre répond sans jamais dire « oui » ni « non ».", "À chaque erreur : un vêtement en moins. Puis échangez."],
+    points: "Tenir jusqu'à la sonnerie : 1 point.",
+    timer: 60
+  },
+  {
+    title: "LES BONS POUR", type: "Coupons", text: "Trois coupons à utiliser cette semaine.",
+    rules: [
+      "Chacun écrit en secret trois « Bon pour… » : un massage, un petit-déjeuner au lit, un câlin de 10 minutes…",
+      "Révélez-les, puis prenez l'écran en photo pour les garder.",
+      "Chacun pourra utiliser un bon de l'autre quand il veut cette semaine (le mot-stop reste valable !)."
+    ],
+    points: "1 point pour chacun… à condition de les honorer !",
+    answers: { count: 2, rows: 3, label: "Bon pour… (un par ligne)" }
+  },
+  {
+    title: "CHICHE SOUS LA COUETTE ?", type: "Défi", text: "Quelles sont les chances que tu le fasses ?",
+    rules: [
+      "L'un lance un défi coquin : « Chiche que tu dors nu(e) cette nuit ? »",
+      "L'autre choisit un nombre maximum entre 3 et 10.",
+      "Comptez « 1, 2, 3 » et dites en même temps un nombre entre 1 et ce maximum.",
+      "Même nombre ? Le défi doit être fait ! Puis échangez les rôles."
+    ],
+    points: "Défi réalisé : 1 point pour celui qui l'a fait."
+  }
 ];
